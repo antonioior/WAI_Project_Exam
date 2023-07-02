@@ -39,3 +39,5 @@ function Seats(Id, IdReservation, Seat, AirplaneType){
     this.Seat = Seat;
     this.AirplaneType = AirplaneType
 }
+
+module.exports={Local, Regional, International, Bookings, Seats}

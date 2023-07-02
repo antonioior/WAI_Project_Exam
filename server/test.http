@@ -1,0 +1,11 @@
+#METHOD ON LOCAL PLANE
+GET http://localhost:3001/api/local
+###
+
+#METHOD ON REGIONAL PLANE
+GET http://localhost:3001/api/regional
+###
+
+#METHOD ON INTERNATIONAL PLANE
+GET http://localhost:3001/api/international
+###
