@@ -1,15 +1,29 @@
 'use strict';
 
+//Imports
 const express = require('express');
+const morgan = require('morgan'); // Middleware for logging messages
+const cors = require('cors'); // Middleware to enable CORS support
 
 //DAO and database init
 const AirplaneSeats_dao = require("./AirplaneSeats-dao");
 const user_dao = require("./user-dao");
 
+const session = require("express-session");
 // init express
 const app = new express();
 const port = 3001;
 
+// set up the middlewares
+app.use(express.json()); // for parsing json request body
+app.use(morgan("dev"));
+
+// set up and enable cors
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // activate the server
 app.listen(port, () => {

@@ -2,12 +2,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-//React elements
+//Components
 import NavBar from "./components/NavbarComponent";
 import AirPlaneShows from "./components/MainPageComponent";
-import Local from "./components/LocalComponent";
-import { Container, Row, Col, Button,Alert } from 'react-bootstrap'
-import {Routes,Route, BrowserRouter,Outlet,Navigate } from 'react-router-dom'
+import LocalFunction from "./components/LocalComponent";
+import Regional from "./components/RegionalComponent";
+import International from "./components/InternationalComponents";
+import { Container, Row, Col, Button,Alert } from 'react-bootstrap';
+import {Routes,Route, BrowserRouter,Outlet,Navigate } from 'react-router-dom';
 
 function App() {
 
@@ -23,7 +25,9 @@ function App() {
           </>
           }>
           <Route index element = {<AirPlaneShows/>} /> 
-          <Route path='/local' element ={<Local/>} />
+          <Route path='/local' element ={<LocalFunction/>} />
+          <Route path='/regional' element={<Regional/>} />
+          <Route path='/international' element={<International/>} />
         </Route>
       </Routes>
     </BrowserRouter>

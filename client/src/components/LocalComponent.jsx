@@ -1,8 +1,17 @@
 import Button from 'react-bootstrap/Button';
+import API from '../API';
+import {useState, useEffect} from 'react';
 
-function Local() {
-
-    return (
+function localFunction() {
+  const [seats, setSeats] = useState([]);
+  useEffect(()=> {
+    const getSeats=async()=>{
+    let s= await API.getLocalSeatsInfo();
+    setSeats(s);
+    }
+    getSeats();
+  },[]);
+  return (
     <>
       <Button variant="primary">Primary</Button>{' '}
       <Button variant="secondary">Secondary</Button>{' '}
@@ -17,4 +26,4 @@ function Local() {
   );
 }
 
-export default Local;
+export default localFunction;
