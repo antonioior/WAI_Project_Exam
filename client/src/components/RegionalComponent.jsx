@@ -1,7 +1,8 @@
-import Table from 'react-bootstrap/Table';
 import {useState, useEffect} from 'react';
+import {Table} from 'react-bootstrap';
 import API from '../API';
-
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 function Regional() {
   const [seats, setSeats] = useState([]);
   useEffect(()=> {
@@ -11,38 +12,30 @@ function Regional() {
     }
     getSeats();
   },[]);
-  
+
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Container fluid="xxl">
+      <Table borderless={true}>
+        <tbody>
+          {seats.map(s => <tr><ButtonRow seat={s} key={s.Id}/></tr>)}
+        </tbody>
+      </Table>
+      
+    </Container>
+    
   );
+}
+function ButtonRow(props){
+  console.log(props.seat.A)
+  return (
+    <>
+      <td>{props.seat.A? <Button variant="danger">{props.seat.Id}{'A'}</Button> : <Button variant= "success">{props.seat.Id}{'A'}</Button>}</td>
+      <td>{props.seat.B? <Button variant="danger">{props.seat.Id}{'B'}</Button> : <Button variant= "success">{props.seat.Id}{'B'}</Button>}</td>
+      <td>{props.seat.C? <Button variant="danger">{props.seat.Id}{'C'}</Button> : <Button variant= "success">{props.seat.Id}{'C'}</Button>}</td>
+      <td>{props.seat.D? <Button variant="danger">{props.seat.Id}{'D'}</Button> : <Button variant= "success">{props.seat.Id}{'D'}</Button>}</td>
+      <td>{props.seat.E? <Button variant="danger">{props.seat.Id}{'E'}</Button> : <Button variant= "success">{props.seat.Id}{'E'}</Button>}</td>
+    </>
+  )
 }
 
 export default Regional;
