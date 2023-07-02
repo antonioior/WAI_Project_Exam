@@ -20,11 +20,10 @@ function Regional() {
           {seats.map(s => <tr><ButtonRow seat={s} key={s.Id}/></tr>)}
         </tbody>
       </Table>
-      
     </Container>
-    
   );
 }
+
 function ButtonRow(props){
   console.log(props.seat.A)
   return (

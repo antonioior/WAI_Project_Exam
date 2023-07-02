@@ -1,7 +1,8 @@
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import {useState, useEffect} from 'react';
+import {Table, Container} from 'react-bootstrap';
 import API from '../API'
+
 
 function International() {
   const [seats, setSeats] = useState([]);
@@ -14,18 +15,28 @@ function International() {
   },[]);
   
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
-      <Card.Body>
-        <Card.Title>Card Title</Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
-      </Card.Body>
-    </Card>
-  );
+    <Container fluid="xxl">
+      <Table borderless={true}>
+        <tbody>
+          {seats.map(s => <tr><ButtonRow seat={s} key={s.Id}/></tr>)}
+        </tbody>
+      </Table>
+    </Container>
+  )
+}
+
+function ButtonRow(props){
+  console.log(props.seat.A)
+  return (
+    <>
+      <td>{props.seat.A? <Button variant="danger">{props.seat.Id}{'A'}</Button> : <Button variant= "success">{props.seat.Id}{'A'}</Button>}</td>
+      <td>{props.seat.B? <Button variant="danger">{props.seat.Id}{'B'}</Button> : <Button variant= "success">{props.seat.Id}{'B'}</Button>}</td>
+      <td>{props.seat.C? <Button variant="danger">{props.seat.Id}{'C'}</Button> : <Button variant= "success">{props.seat.Id}{'C'}</Button>}</td>
+      <td>{props.seat.D? <Button variant="danger">{props.seat.Id}{'D'}</Button> : <Button variant= "success">{props.seat.Id}{'D'}</Button>}</td>
+      <td>{props.seat.D? <Button variant="danger">{props.seat.Id}{'E'}</Button> : <Button variant= "success">{props.seat.Id}{'E'}</Button>}</td>
+      <td>{props.seat.D? <Button variant="danger">{props.seat.Id}{'F'}</Button> : <Button variant= "success">{props.seat.Id}{'F'}</Button>}</td>
+    </>
+  )
 }
 
 export default International;
