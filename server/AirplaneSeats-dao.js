@@ -34,7 +34,7 @@ exports.reserveLocalSeats = (Id, column) => {
         query = 'UPDATE Local SET C = ? WHERE Id=?';
         break;
       case 'D' :
-        query = 'UPDATE Local SET C = ? WHERE Id=?';
+        query = 'UPDATE Local SET D = ? WHERE Id=?';
         break;
       default : 
         reject(err);
@@ -87,7 +87,7 @@ exports.reserveRegionalSeats = (Id, column) => {
       break;
   }
   return new Promise((resolve, reject) => {
-    db.all(query, [1, Id], (err, rows) => {
+    db.run(query, [1, Id], (err, rows) => {
       if (err)
         reject(err);
       resolve({'seat' : 'reserved'});

@@ -1,50 +1,28 @@
 const SERVER_URL = 'http://localhost:3001';
-import {Local, Regional, International} from "./Airplane";
 
-//METHOD FOR LOCAL PLANE
+//API GET SEATSINFO
+//To retrieve if seats is free or not
 //GET seats info
-const getLocalSeatsInfo = async () =>{
-  const response = await fetch(`${SERVER_URL}/api/local`, { 
+export const getSeatsInfo = async (planeType) =>{
+  const response = await fetch(`${SERVER_URL}/api${planeType}`, { 
     method : 'GET',
-    credentials:'include'});
+    });
   const seatsInfo = await response.json();
   if(response.ok){
-    let seats = seatsInfo.map(s => new Local(s.Id, s.A, s.B, s.C, s.D));
-    return seats;
+    return seatsInfo;
   }
   else
     throw seatsInfo;  //give an error
 }
-
-//METHOD FOR REGIONAL PLANE
-//GET seats info
-const getRegionalSeatsInfo = async() => {
-  const response = await fetch(`${SERVER_URL}/api/regional`, {
-    method : 'GET',
-    credentials : 'include'});
-  const seatsInfo = await response.json();
-  if(response.ok){
-    let seats = seatsInfo.map (s => new Regional(s.Id, s.A, s.B, s.C, s.D, s.E));
-    return seats;
-  }
-  else
-    throw seatsInfo;
+//API PATCH RESERVE SEAT
+//
+export const patchReserveSeat = async(Id, column, planeType) => {
+  const response = await fetch(`${SERVER_URL}/api${planeType}`, {
+    method : 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+      credentials: 'include',
+      body: JSON.stringify({
+        Id:Id,
+        Column : column})
+    });
 }
-
-//METHOD FOR INTERNATIONAL PLANE
-//GET seats info
-const getInternationalSeatsInfo = async() => {
-  const response = await fetch(`${SERVER_URL}/api/international`, {
-    method : 'GET',
-    credentials : 'include'});
-  const seatsInfo = await response.json();
-  if(response.ok){
-    let seats = seatsInfo.map(s => new International(s.Id, s.A, s.B, s.C, s.D, s.E, s.F))
-    return seats;
-  }
-  else
-    throw seatsInfo;
-}
-
-const API = {getLocalSeatsInfo, getRegionalSeatsInfo, getInternationalSeatsInfo};
-export default API;
