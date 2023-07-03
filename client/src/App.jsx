@@ -1,11 +1,9 @@
 // Import Boostrap and CSS
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
-
 //Components
 import NavBar from "./components/NavbarComponent";
 import AirPlaneShows from "./components/MainPageComponent";
-import LocalFunction from "./components/LocalComponent";
+import LocalFunction from "./components/Local/LocalComponent";
 import Regional from "./components/RegionalComponent";
 import International from "./components/InternationalComponents";
 import { Container, Row, Col, Button,Alert } from 'react-bootstrap';
@@ -19,7 +17,7 @@ function App() {
         <Route element={
           <>
             <NavBar/>
-            <Container fluid >
+            <Container fluid={true} >
               <Outlet/>
             </Container>
           </>

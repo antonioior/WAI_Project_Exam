@@ -37,6 +37,7 @@ app.listen(port, () => {
 /*      API LOCAL PLANE     */
 /*                          */
 /****************************/
+
 //GET /api/local
 //return all seat of airplane of type local
 app.get('/api/local', async (req, res) => {

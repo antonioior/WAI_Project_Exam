@@ -26,7 +26,6 @@ function International() {
 }
 
 function ButtonRow(props){
-  console.log(props.seat.A)
   return (
     <>
       <td>{props.seat.A? <Button variant="danger">{props.seat.Id}{'A'}</Button> : <Button variant= "success">{props.seat.Id}{'A'}</Button>}</td>
