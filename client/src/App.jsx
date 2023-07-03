@@ -3,11 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //Components
 import NavBar from "./components/NavbarComponent";
 import AirPlaneShows from "./components/MainPageComponent";
-import LocalFunction from "./components/Local/LocalComponent";
-import Regional from "./components/RegionalComponent";
-import International from "./components/InternationalComponents";
 import { Container, Row, Col, Button,Alert } from 'react-bootstrap';
 import {Routes,Route, BrowserRouter,Outlet,Navigate } from 'react-router-dom';
+import Seats from "./components/Seats/Seats";
 
 function App() {
 
@@ -23,9 +21,9 @@ function App() {
           </>
           }>
           <Route index element = {<AirPlaneShows/>} /> 
-          <Route path='/local' element ={<LocalFunction/>} />
-          <Route path='/regional' element={<Regional/>} />
-          <Route path='/international' element={<International/>} />
+          <Route path='/local' element ={<Seats/>} />
+          <Route path='/regional' element={<Seats/>} />
+          <Route path='/international' element={<Seats/>} />
         </Route>
       </Routes>
     </BrowserRouter>
