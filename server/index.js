@@ -10,6 +10,7 @@ const AirplaneSeats_dao = require("./AirplaneSeats-dao");
 const user_dao = require("./user-dao");
 
 const session = require("express-session");
+
 // init express
 const app = new express();
 const port = 3001;
@@ -31,35 +32,81 @@ app.listen(port, () => {
 });
 
 
-//API LOCAL PLANE
+/****************************/
+/*                          */
+/*      API LOCAL PLANE     */
+/*                          */
+/****************************/
 //GET /api/local
 //return all seat of airplane of type local
-app.get('/api/local', (req, res) => {
-  AirplaneSeats_dao.getLocalSeats()
+app.get('/api/local', async (req, res) => {
+  await AirplaneSeats_dao.getLocalSeats()
     .then(seats => {
       res.status(200).json(seats);
     })
     .catch(() => res.status(500).json(err));
 });
 
-//API REGIONAL PLANE
+//POST /api/local
+app.post('/api/local', async (req, res) => {
+  try {
+    const result = await AirplaneSeats_dao.reserveLocalSeats(req.body.Id, req.body.Column);
+    return res.status(201).json(result)
+  }
+  catch(e){
+    return res.status(401).json({error : "It is not possible reserve seat"})
+  }
+})
+
+
+/****************************/
+/*                          */
+/*    API REGIONAL PLANE    */
+/*                          */
+/****************************/
+
 //GET /api/regional
 //return all seat of airplane of type regional
-app.get('/api/regional', (req, res)=>{
-  AirplaneSeats_dao.getRegionalSeats()
+app.get('/api/regional', async (req, res)=>{
+  await AirplaneSeats_dao.getRegionalSeats()
     .then(seats => {
       res.status(200).json(seats);
     })
     .catch(() => res.status(500).json(err))
 })
 
-//API INTERNATIONAL PLANE
+app.post('/api/regional', async (req, res) => {
+  try {
+    const result = await AirplaneSeats_dao.reserveRegionalSeats(req.body.Id, req.body.Column);
+    return res.status(201).json(result);
+  }
+  catch(e){
+    return res.status(401).json({error : "It is not possible reserve seat"});
+  }
+})
+
+
+/****************************/
+/*                          */
+/* API INTERNATIONAL PLANE  */
+/*                          */
+/****************************/
 //GET /api/international
 //return all seat of airplane of type international
-app.get('/api/international', (req, res) => {
-  AirplaneSeats_dao.getInternationalSeats()
+app.get('/api/international', async (req, res) => {
+  await AirplaneSeats_dao.getInternationalSeats()
     .then(seats => {
       res.status(200).json(seats);
     })
     .catch(() => res.status(500).jsno(err))
+})
+
+app.post('/api/international', async (req, res) => {
+  try{
+    const result = await AirplaneSeats_dao.reserveInternationalSeats(req.body.Id, req.body.Column);
+    return res.status(201).json(result);
+  }
+  catch(e){
+    return res.status(401).json({error : "It is not possible reserve seat"});
+  }
 })

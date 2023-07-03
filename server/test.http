@@ -1,11 +1,57 @@
-#METHOD ON LOCAL PLANE
+#######################################
+#                                     #
+#       METHOD ON LOCAL PLANE         #
+#                                     #
+#######################################
+#GET to obtain seats
 GET http://localhost:3001/api/local
 ###
 
-#METHOD ON REGIONAL PLANE
-GET http://localhost:3001/api/regional
+#POST to reserve a seat
+POST http://localhost:3001/api/local
+content-type: application/json
+
+{
+  body : {
+    "Id" : "10",
+    "Column" : "A"
+  }
+}
 ###
 
-#METHOD ON INTERNATIONAL PLANE
+
+#######################################
+#                                     #
+#       METHOD ON REGIONAL PLANE      #
+#                                     #
+#######################################
+#GET to obtain seats
+GET http://localhost:3001/api/regional
+
+###
+
+#POST to reserve a seat
+POST http://localhost:3001/api/regional
+body:{
+  "Id": 1,,
+  "Column" : "A"
+};
+
+###
+
+
+#######################################
+#                                     #
+#    METHOD ON INTERNATIONAL PLANE    #
+#                                     #
+#######################################
+#GET to obtain seats
 GET http://localhost:3001/api/international
 ###
+
+#POST to reserve a seat
+POST http://localhost:3001/api/international
+body : {
+  "Id" : 2,,
+  "Column" : "C"
+}
