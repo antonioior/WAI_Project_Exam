@@ -20,7 +20,7 @@ exports.getLocalSeats = () => {
   })
 }
 
-//POST UPDATE seats
+//PATCH UPDATE seats
 exports.reserveLocalSeats = (Id, column) => {
   let query;
     switch(column) {
@@ -63,7 +63,7 @@ exports.getRegionalSeats = () => {
   })
 }
 
-//POST UPDATE SEATS
+//PATCH UPDATE SEATS
 exports.reserveRegionalSeats = (Id, column) => {
   let query;
   switch(column) {
@@ -109,7 +109,7 @@ exports.getInternationalSeats = () => {
   })
 }
 
-//POST UPDATE SEATS
+//PATCH UPDATE SEATS
 exports.reserveInternationalSeats = (Id, column) => {
   let query;
   switch(column) {

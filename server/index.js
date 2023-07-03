@@ -48,7 +48,7 @@ app.get('/api/local', async (req, res) => {
 });
 
 //POST /api/local
-app.post('/api/local', async (req, res) => {
+app.patch('/api/local', async (req, res) => {
   try {
     const result = await AirplaneSeats_dao.reserveLocalSeats(req.body.Id, req.body.Column);
     return res.status(201).json(result)
@@ -75,7 +75,7 @@ app.get('/api/regional', async (req, res)=>{
     .catch(() => res.status(500).json(err))
 })
 
-app.post('/api/regional', async (req, res) => {
+app.patch('/api/regional', async (req, res) => {
   try {
     const result = await AirplaneSeats_dao.reserveRegionalSeats(req.body.Id, req.body.Column);
     return res.status(201).json(result);
@@ -101,7 +101,7 @@ app.get('/api/international', async (req, res) => {
     .catch(() => res.status(500).jsno(err))
 })
 
-app.post('/api/international', async (req, res) => {
+app.patch('/api/international', async (req, res) => {
   try{
     const result = await AirplaneSeats_dao.reserveInternationalSeats(req.body.Id, req.body.Column);
     return res.status(201).json(result);
