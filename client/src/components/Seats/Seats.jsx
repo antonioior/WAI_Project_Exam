@@ -42,24 +42,24 @@ function Seats() {
         <Col md={4}>
           <Table borderless={true}>
             <tbody>
-              {seats.map(s => <tr><ButtonRow seat={s} type={location.pathname} key={s.Id}/></tr>)}
+              {seats.map(s => <tr key={s.Id}><ButtonRow seat={s} type={location.pathname}/></tr>)}
             </tbody>
           </Table>
         </Col>
         <Col md={5}>
           <div>
-            <p>
+            <span>
               Occupied seat : 
               <ProgressBar striped variant="danger" min={0} now={occupiedSeat} max={totalSeat} label={occupiedSeat} />
-            </p>
-            <p>
+            </span>
+            <span>
               Avaible seat :
               <ProgressBar striped variant="success" min={0} now={avaibleSeat} max={totalSeat} label={avaibleSeat} />
-            </p>
-            <p>
+            </span>
+            <span>
               Total seat : 
               <ProgressBar striped variant="info"  min={0} now={totalSeat} max={totalSeat} label={totalSeat} />
-            </p>
+            </span>
           </div>
         </Col>
       </Row>

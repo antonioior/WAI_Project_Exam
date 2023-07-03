@@ -15,7 +15,7 @@ function App() {
         <Route element={
           <>
             <NavBar/>
-            <Container fluid={true} >
+            <Container fluid>
               <Outlet/>
             </Container>
           </>
