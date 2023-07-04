@@ -7,13 +7,18 @@
 GET http://localhost:3001/api/local
 ###
 
+#GET to obtain info of a sigle seat
+GET http://localhost:3001/api/local/10/C
+###
+
 #PATCH to reserve a seat
 PATCH http://localhost:3001/api/local
 content-type: application/json
 
 {
-  "Id" : 9,
-  "Column" : "A"
+  "Id" : 1,
+  "Column" : "A",
+  "Reserve": 0
 }
 ###
 
@@ -27,13 +32,18 @@ content-type: application/json
 GET http://localhost:3001/api/regional
 ###
 
+#GET to obtain info of a sigle seat
+GET http://localhost:3001/api/regional/4/A
+###
+
 #PATCH to reserve a seat
 PATCH http://localhost:3001/api/regional
 content-type : application/json
 
 {
   "Id": 6,
-  "Column" : "B"
+  "Column" : "E",
+  "Reserve" : 0
 }
 ###
 
@@ -47,13 +57,18 @@ content-type : application/json
 GET http://localhost:3001/api/international
 ###
 
+#GET to obtain info of a sigle seat
+GET http://localhost:3001/api/international/25/C
+###
+
 #PATCH to reserve a seat
 PATCH http://localhost:3001/api/international
 content-type : application/jsons
 
 {
-  "Id": 6,
-  "Column" : "B"
+  "Id": 25,
+  "Column" : "B",
+  "Reserve" : 0
 }
 ###
 

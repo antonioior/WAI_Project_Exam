@@ -48,10 +48,22 @@ app.get('/api/local', async (req, res) => {
     .catch(() => res.status(500).json(err));
 });
 
-//POST /api/local
+
+//GET /api/local
+//return the info of a single seat
+app.get('/api/local/:id/:column', async(req, res) => {
+  await AirplaneSeats_dao.getLocalSeat(req.params.id, req.params.column)
+    .then(seat => {
+      res.status(200).json(seat);
+    })
+    .catch(() => res.status(500).json(err));
+})
+
+
+//PATCH /api/local
 app.patch('/api/local', async (req, res) => {
   try {
-    const result = await AirplaneSeats_dao.reserveLocalSeats(req.body.Id, req.body.Column);
+    const result = await AirplaneSeats_dao.reserveLocalSeats(req.body.Id, req.body.Column, req.body.Reserve);
     return res.status(201).json(result)
   }
   catch(e){
@@ -76,9 +88,20 @@ app.get('/api/regional', async (req, res)=>{
     .catch(() => res.status(500).json(err))
 })
 
+//GET /api/local
+//return the info of a single seat
+app.get('/api/regional/:id/:column', async(req, res) => {
+  await AirplaneSeats_dao.getRegionalSeat(req.params.id, req.params.column)
+    .then(seat => {
+      res.status(200).json(seat);
+    })
+    .catch(() => res.status(500).json(err));
+})
+
+//PATCH /api/regional
 app.patch('/api/regional', async (req, res) => {
   try {
-    const result = await AirplaneSeats_dao.reserveRegionalSeats(req.body.Id, req.body.Column);
+    const result = await AirplaneSeats_dao.reserveRegionalSeats(req.body.Id, req.body.Column, req.body.Reserve);
     return res.status(201).json(result);
   }
   catch(e){
@@ -102,9 +125,20 @@ app.get('/api/international', async (req, res) => {
     .catch(() => res.status(500).jsno(err))
 })
 
+//GET /api/international
+//return info about one seat
+app.get('/api/international/:id/:column', async(req, res) => {
+  await AirplaneSeats_dao.getInternationalSeat(req.params.id, req.params.column)
+    .then(seat => {
+      res.status(200).json(seat);
+    })
+    .catch(() => res.status(500).json(err));
+})
+
+//PATCH /api/international
 app.patch('/api/international', async (req, res) => {
   try{
-    const result = await AirplaneSeats_dao.reserveInternationalSeats(req.body.Id, req.body.Column);
+    const result = await AirplaneSeats_dao.reserveInternationalSeats(req.body.Id, req.body.Column, req.body.Reserve);
     return res.status(201).json(result);
   }
   catch(e){

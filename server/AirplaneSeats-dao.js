@@ -6,7 +6,11 @@ const db = new sqlite.Database('AirplaneSeats.sqlite', (err) => {
   if (err) throw err;
 });
 
-//OPERATION ON LOCAL PLANE
+/*****************************/
+/*                           */
+/*  OPERATION LOCAL PLANE    */
+/*                           */
+/*****************************/
 //GET seats
 exports.getLocalSeats = () => {
   return new Promise((resolve, reject) =>{
@@ -20,8 +24,39 @@ exports.getLocalSeats = () => {
   })
 }
 
+//GET seat to obtain if a specific place is free or not
+exports.getLocalSeat = (id, column) => {
+  let query;
+  switch(column){
+    case 'A':
+      query = 'SELECT Id, A AS Column FROM Local WHERE Id=?';
+      break;
+    case 'B':
+      query = 'SELECT Id, B AS Column FROM Local WHERE Id=?';
+      break;
+    case 'C':
+      query = 'SELECT Id, C AS Column FROM Local WHERE Id=?';
+      break
+    case 'D':
+      query = 'SELECT Id, D AS Column FROM Local WHERE Id=?';
+      break;
+    default:
+      break;
+  }
+  return new Promise((resolve, reject) => {
+    db.all(query, [id], (err, rows) => {
+      if(err)
+        reject(err);
+      resolve({
+        "Id" : rows[0].Id,
+        [column] : rows[0].Column
+      })
+    })
+  })
+}
+
 //PATCH UPDATE seats
-exports.reserveLocalSeats = (Id, column) => {
+exports.reserveLocalSeats = (Id, column, reserve) => {
   let query;
     switch(column) {
       case 'A' : 
@@ -41,15 +76,21 @@ exports.reserveLocalSeats = (Id, column) => {
         break;
     }
   return new Promise((resolve, reject) => {
-    db.all(query, [1, Id], (err, rows) => {
+    db.all(query, [reserve, Id], (err, rows) => {
       if(err)
         reject(err);
-      resolve({'seat' : 'reserved'});
+      if(reserve)
+        resolve({'seat' : 'reserved'});
+      resolve({"seat" : "released"})
     })
   })
 }
 
-//Operation on REGIONAL PLANE
+/********************************/
+/*                              */
+/*   OPERATION REGIONAL PLANE   */
+/*                              */
+/********************************/
 //GET SEATS
 exports.getRegionalSeats = () => {
   return new Promise((resolve, reject) => {
@@ -63,8 +104,42 @@ exports.getRegionalSeats = () => {
   })
 }
 
+//GET seat to obtain if a specific place is free or not
+exports.getRegionalSeat = (id, column) => {
+  let query;
+  switch(column){
+    case 'A':
+      query = 'SELECT Id, A AS Column FROM Regional WHERE Id=?';
+      break;
+    case 'B':
+      query = 'SELECT Id, B AS Column FROM Regional WHERE Id=?';
+      break;
+    case 'C':
+      query = 'SELECT Id, C AS Column FROM Regional WHERE Id=?';
+      break
+    case 'D':
+      query = 'SELECT Id, D AS Column FROM Regional WHERE Id=?';
+      break;
+    case 'E':
+      query = 'SELECT Id, E AS Column FROM Regional WHERE Id=?';
+      break;
+    default:
+      break;
+  }
+  return new Promise((resolve, reject) => {
+    db.all(query, [id], (err, rows) => {
+      if(err)
+        reject(err);
+      resolve({
+        "Id" : rows[0].Id,
+        [column] : rows[0].Column
+      })
+    })
+  })
+}
+
 //PATCH UPDATE SEATS
-exports.reserveRegionalSeats = (Id, column) => {
+exports.reserveRegionalSeats = (Id, column, reserve) => {
   let query;
   switch(column) {
     case 'A':
@@ -87,15 +162,21 @@ exports.reserveRegionalSeats = (Id, column) => {
       break;
   }
   return new Promise((resolve, reject) => {
-    db.run(query, [1, Id], (err, rows) => {
+    db.all(query, [reserve, Id], (err, rows) => {
       if (err)
         reject(err);
-      resolve({'seat' : 'reserved'});
+      if(reserve)
+        resolve({'seat' : 'reserved'});
+      resolve({"seat" : "released"})
     })
   })
 }
 
-//OPERATION ON INTERNATIONAL PLANE
+/**********************************/
+/*                                */
+/* OPERATION INTERNATIONAL PLANE  */
+/*                                */
+/**********************************/
 //GET SEATS
 exports.getInternationalSeats = () => {
   return new Promise((resolve, reject) => {
@@ -109,8 +190,44 @@ exports.getInternationalSeats = () => {
   })
 }
 
+//GET single seat
+exports.getInternationalSeat = (id, column) => {
+  let query;
+  switch(column){
+    case 'A':
+      query = 'SELECT Id, A AS Column FROM International WHERE Id=?';
+      break;
+    case 'B':
+      query = 'SELECT Id, B AS Column FROM International WHERE Id=?';
+      break;
+    case 'C':
+      query = 'SELECT Id, C AS Column FROM International WHERE Id=?';
+      break
+    case 'D':
+      query = 'SELECT Id, D AS Column FROM International WHERE Id=?';
+      break;
+    case 'E':
+      query = 'SELECT Id, E AS Column FROM International WHERE Id=?';
+      break;
+    case 'F':
+      query = 'SELECT Id, F AS Column FROM International WHERE Id=?';
+    default:
+      break;
+  }
+  return new Promise((resolve, reject) => {
+    db.all(query, [id], (err, rows) => {
+      if(err)
+        reject(err);
+      resolve({
+        "Id" : rows[0].Id,
+        [column] : rows[0].Column
+      })
+    })
+  })
+}
+
 //PATCH UPDATE SEATS
-exports.reserveInternationalSeats = (Id, column) => {
+exports.reserveInternationalSeats = (Id, column, reserve) => {
   let query;
   switch(column) {
     case 'A':
@@ -136,10 +253,12 @@ exports.reserveInternationalSeats = (Id, column) => {
       break;
   }
   return new Promise((resolve, reject) => {
-    db.all(query, [1, Id], (err, rows) => {
+    db.all(query, [reserve, Id], (err, rows) => {
       if(err)
         reject(err);
-      resolve({'seat' : 'reserved'});
+        if(reserve)
+        resolve({'seat' : 'reserved'});
+      resolve({"seat" : "released"})
     })
   })
 }
