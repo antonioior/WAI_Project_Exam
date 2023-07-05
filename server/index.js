@@ -346,3 +346,51 @@ app.post('/api/bookings', async(req, res) => {
     }
   } 
 })
+
+app.delete('/api/bookings', async(req, res) => {
+  const idUser = req.body.IdUser;
+  const airplaneType = req.body.AirplaneType;
+  try {
+    const listSeat = await AirplaneSeats_dao.getBookingByUserIdAndByPlane(idUser, airplaneType);
+    for(const seat of listSeat){
+      switch(airplaneType){
+        case 'local':{
+          try {
+            await AirplaneSeats_dao.reserveLocalSeats(seat.SeatRow, seat.SeatColumn, 0);
+          }
+          catch(e){
+            return res.status(401).json({error : "It is not possible reserve seat"})
+          }
+          break;
+        }
+        case 'regional': {
+          try {
+            await AirplaneSeats_dao.reserveRegionalSeats(seat.SeatRow, seat.SeatColumn, 0);
+          }
+          catch(e){
+            return res.status(401).json({error : "It is not possible reserve seat"})
+          }
+          break;
+        }
+        case 'international':{
+          try {
+            await AirplaneSeats_dao.reserveInternationalSeats(seat.SeatRow, seat.SeatColumn, 0);
+          }
+          catch(e){
+            return res.status(401).json({error : "It is not possible reserve seat"})
+          }
+          break;
+        }
+        default: {
+          return res.status(500).json({"message" : "plane not valid"});
+        }
+      }
+    }
+    await AirplaneSeats_dao.deleteBooking(idUser, airplaneType);
+    return res.status(202).json({"message" : "deleted with success"})
+  }
+  catch(err){
+    return res.status(503).json({"message" : "error"});
+  }
+  
+})

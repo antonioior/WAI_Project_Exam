@@ -108,3 +108,11 @@ content-type : application/json
   ]
 }
 ###
+DELETE http://localhost:3001/api/bookings
+content-type : application/json
+
+{
+  "IdUser" : 1,
+  "AirplaneType" : "international"
+}
+###

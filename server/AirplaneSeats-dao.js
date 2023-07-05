@@ -299,6 +299,12 @@ exports.insertBookings = (IdUser, SeatRow, SeatColumn, AirplaneType) => {
   })
 }
 
-// exports.deleteBooking =(IdUser, AirplaneType) => {
-
-// }
+exports.deleteBooking =(IdUser, AirplaneType) => {
+  const query = "DELETE FROM Bookings WHERE IdUser=? AND AirplaneType=?"
+  return new Promise((resolve, reject) => {
+    db.run(query, [IdUser, AirplaneType], function(err) {
+      if(err)
+        reject(err);
+    });
+  });
+}
