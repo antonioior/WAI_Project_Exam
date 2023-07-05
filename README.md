@@ -1,12 +1,15 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/TsciYmrA)
-# Exam #N: "Exam Title"
-## Student: s123456 LASTNAME FIRSTNAME 
+# Exam #2: "Airplane Seats"
+## Student: s317748 IORIO ANTONIO 
 
 ## React Client Application Routes
 
-- Route `/`: page content and purpose
-- Route `/something/:param`: page content and purpose, param specification
-- ...
+- Route `/`: this is homepage and it gives the possibility to choose a plane type to book
+- Route `/local`: page content seat information and possibility to reserve seats in a local plane if they are avaible
+- Route `/regional`: page content seat information and possibility to reserve seats in a regional plane if they are avaible
+- Route `/international`: page content seat information and possibility to reserve seats in a international plane if they are avaible
+- Route `/login`: page where user can do login
+- Route `/reservation`: shows reservation of a specific user, but he must be logged
 
 ## API Server
 
@@ -23,9 +26,11 @@
 
 ## Database Tables
 
-- Table `users` - contains xx yy zz
-- Table `something` - contains ww qq ss
-- ...
+- Table `Bookings` - contains information about bookings
+- Table `International` - contains information about seats of international plane
+- Table `Local` - contain information about seats of local plane
+- Table `Regional` - contain information about seats of regional plane
+- Table `User` - contains information about user
 
 ## Main React Components
 
@@ -41,5 +46,7 @@
 
 ## Users Credentials
 
-- username, password (plus any other requested info)
-- username, password (plus any other requested info)
+- username, 12345678 (plus any other requested info)
+- username, 12345678 (plus any other requested info)
+
+

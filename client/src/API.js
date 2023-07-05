@@ -14,15 +14,46 @@ export const getSeatsInfo = async (planeType) =>{
   else
     throw seatsInfo;  //give an error
 }
-//API PATCH RESERVE SEAT
-//
-export const patchReserveSeat = async(Id, column, planeType) => {
+//API PATCH RESERVE OR RELEASE A SEAT
+export const patchReserveSeat = async(Id, column, reserve, planeType) => {
   const response = await fetch(`${SERVER_URL}/api${planeType}`, {
     method : 'PATCH',
     headers: {'Content-Type': 'application/json'},
       credentials: 'include',
       body: JSON.stringify({
         Id:Id,
-        Column : column})
-    });
+        Column : column,
+        Reserve : reserve})
+  });
+  return await response.json();
+}
+
+//API FOR AUTHENTICATION
+//LOGIN
+export async function login(userData) {
+  const response = await fetch("/api/sessions",{
+    method :"POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  })
+  return await response.json();
+}
+
+//GET SESSION
+export async function getSession() {
+  const response = await fetch("/api/sessions/current",{
+    method: "GET",
+    credentials: "include" });
+  return await response.json();
+}
+
+//LOGOUT
+export async function logout() {
+  const response = await fetch("/api/sessions/current", {
+    method: "DELETE",
+    credentials: "include" });
+  return await response.json();
 }

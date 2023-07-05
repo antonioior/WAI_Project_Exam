@@ -1,5 +1,5 @@
 const sqlite = require('sqlite3');
-const {Local, Regional, International, Bookings, Seats} = require('./AirplaneSeatsModels');
+const {Local, Regional, International, Bookings} = require('./AirplaneSeatsModels');
 
 //open the database
 const db = new sqlite.Database('AirplaneSeats.sqlite', (err) => {
@@ -49,7 +49,8 @@ exports.getLocalSeat = (id, column) => {
         reject(err);
       resolve({
         "Id" : rows[0].Id,
-        [column] : rows[0].Column
+        "Column" : [column][0],
+        "Occupied" : rows[0].Column
       })
     })
   })
@@ -80,8 +81,8 @@ exports.reserveLocalSeats = (Id, column, reserve) => {
       if(err)
         reject(err);
       if(reserve)
-        resolve({'seat' : 'reserved'});
-      resolve({"seat" : "released"})
+        resolve({'reserved' : 1});
+      resolve({'released' : 0})
     })
   })
 }
@@ -132,7 +133,8 @@ exports.getRegionalSeat = (id, column) => {
         reject(err);
       resolve({
         "Id" : rows[0].Id,
-        [column] : rows[0].Column
+        "Column" : [column][0],
+        "Occupied" : rows[0].Column
       })
     })
   })
@@ -166,8 +168,8 @@ exports.reserveRegionalSeats = (Id, column, reserve) => {
       if (err)
         reject(err);
       if(reserve)
-        resolve({'seat' : 'reserved'});
-      resolve({"seat" : "released"})
+        resolve({'reserved' : 1});
+      resolve({'released' : 0})
     })
   })
 }
@@ -220,7 +222,8 @@ exports.getInternationalSeat = (id, column) => {
         reject(err);
       resolve({
         "Id" : rows[0].Id,
-        [column] : rows[0].Column
+        "Column" : [column],
+        "Occupied" : rows[0].Column
       })
     })
   })
@@ -257,8 +260,45 @@ exports.reserveInternationalSeats = (Id, column, reserve) => {
       if(err)
         reject(err);
         if(reserve)
-        resolve({'seat' : 'reserved'});
-      resolve({"seat" : "released"})
+        resolve({'reserved' : 1});
+      resolve({'released' : 0})
     })
   })
 }
+
+/**********************************/
+/*                                */
+/*        OPERATION BOOKINGS      */
+/*                                */
+/**********************************/
+//POST insert in booking table
+exports.getBookingByUserIdAndByPlane = (user, planeType) => {
+  let query = "SELECT * FROM Bookings WHERE IdUser=? AND AirplaneType=?";
+  return new Promise((resolve, reject) => {
+    db.all(query, [user, planeType], (err, rows) => {
+      if(err)
+        reject(err);
+      const seatReserved = [];
+      rows.map(x => seatReserved.push({
+        "SeatRow" : x.SeatRow,
+        "SeatColumn" : x.SeatColumn
+      }))
+      resolve(seatReserved);
+    });
+  });
+}
+
+exports.insertBookings = (IdUser, SeatRow, SeatColumn, AirplaneType) => {
+  let query = "INSERT INTO Bookings(IdUser, SeatRow, SeatColumn, AirplaneType) VALUES (?,?,?,?)";
+  return new Promise((resolve, reject) => {
+    db.run(query, [IdUser, SeatRow, SeatColumn, AirplaneType], function(err) {
+      if(err)
+        reject(err);
+      resolve({"Booked" : 1});
+    });
+  })
+}
+
+// exports.deleteBooking =(IdUser, AirplaneType) => {
+
+// }

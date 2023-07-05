@@ -13,7 +13,8 @@ import {
 } from "react-router-dom";
 import Seats from "./components/Seats/Seats";
 import { AuthProvider } from "./components/AuthContext";
-
+import Login from './components/AuthComponent'
+import MyReservation from "./components/MyReservationComponent";
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +34,8 @@ function App() {
             <Route path="/local" element={<Seats />} />
             <Route path="/regional" element={<Seats />} />
             <Route path="/international" element={<Seats />} />
+            <Route path = "/login" element={<Login />} />
+            <Route path = "/reservation" element={<MyReservation />} />
           </Route>
         </Routes>
       </AuthProvider>

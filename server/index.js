@@ -1,18 +1,21 @@
-'use strict';
+'use strict'
 
-//Imports
+//imports
 const express = require('express');
 const morgan = require('morgan'); // Middleware for logging messages
 const cors = require('cors'); // Middleware to enable CORS support
 
-//DAO and database init
-const AirplaneSeats_dao = require("./AirplaneSeats-dao");
-const user_dao = require("./user-dao");
+const {check, validationResult} = require('express-validator'); // Middleware for validation
+
+// DAO and Database Init
+const AirplaneSeats_dao = require("./AirplaneSeats-dao");//module for accessing the pages table in the DB
+const userDao = require("./user-dao");//module for accessing the user table in the DB
+
 
 const session = require("express-session");
 
 // init express
-const app = new express();
+const app = express();
 const port = 3001;
 
 // set up the middlewares
@@ -26,10 +29,101 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// activate the server
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+//Passport-related imports
+const passport = require("passport"); //authentication middleware
+const LocalStrategy = require("passport-local"); //authentication strategy(username and password)
+
+// Passport: set up local strategy to search in the DB a user with matching password
+passport.use(new LocalStrategy(async function verify(username, password, cb) {
+  const user = await userDao.getUser(username, password);
+  if(!user)
+    return cb(null, false, 'Incorrect username or password.');
+    
+  return cb(null, user);
+}));
+
+// Serializing in the session the user object given from LocalStrategy(verify).
+passport.serializeUser(function (user, cb) {
+  cb(null, user);
 });
+
+// Starting from the data in the session, we extract the current (logged-in) user.
+passport.deserializeUser(function (user, cb) { 
+  //double check that user is still in User db
+  return userDao.getUserById(user.id)
+  .then(user => cb(null, user))
+  .catch(err => callback(err, null));
+});
+
+//creating the session
+app.use(session({
+  secret: "shhhhh... it's a secret!",
+  resave: false,
+  saveUninitialized: false,
+}));
+
+//creating the session
+app.use(passport.authenticate('session'));
+
+//authentication verification of log in
+const isLoggedIn = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+  return res.status(401).json({error: 'Not authorized'});
+}
+
+app.listen(port, () => {
+  console.log(`Server listenting at http://localhost:${port}`)
+})
+
+/*************************/
+/*                       */
+/*      API LOG IN       */
+/*                       */
+/*************************/
+// POST /api/sessions
+//This route that is used for performing login
+app.post('/api/sessions', function(req, res, next) {
+  passport.authenticate('local', (err, user, info) => {
+    if (err)
+      return next(err);
+      if (!user) {
+        return res.status(401).send(info);
+      }
+   
+      req.login(user, (err) => {
+        if (err)
+          return next(err);
+        
+        // req.user contains the authenticated user, we send all the user info back
+        return res.status(201).json(req.user);
+      });
+  })(req, res, next);
+});
+
+
+// GET /api/sessions/current
+//This route check if the user is logged in or not
+app.get('/api/sessions/current', (req, res) => {
+  if(req.isAuthenticated()) {
+    res.json(req.user);}
+  else
+    res.status(401).json({error: 'Not authenticated'});
+});
+
+// DELETE /api/session/current
+//This route checks that user is logged in or not
+app.delete('/api/sessions/current', (req, res) => {
+  req.logout(() => {
+    res.end();
+  });
+});
+
+const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
+  return `${location}[${param}]: ${msg}`;
+};
 
 
 /****************************/
@@ -144,4 +238,111 @@ app.patch('/api/international', async (req, res) => {
   catch(e){
     return res.status(401).json({error : "It is not possible reserve seat"});
   }
+})
+
+/****************************/
+/*                          */
+/*    API RESERVE SEATS     */
+/*                          */
+/****************************/
+app.get('/api/bookings/:IdUser/:AirplaneType', async(req, res) => {
+  await AirplaneSeats_dao.getBookingByUserIdAndByPlane(parseInt(req.params.IdUser), req.params.AirplaneType)
+    .then(reservation => {
+      res.status(200).json(reservation);
+    })
+    .catch(() => res.status(500).json(err))
+})
+
+//POST to reserve one or more seat
+//flag 1 the value in the table of airplane
+//add a record 
+app.post('/api/bookings', async(req, res) => {
+  const idUser = req.body.IdUser;
+  const seats = req.body.Seats;
+  const planeType = req.body.PlaneType;
+  for (const seat of seats){
+    switch(planeType) {
+      case 'local': {
+        try{
+          const result = await AirplaneSeats_dao.getLocalSeat(seat.Id, seat.Column);
+          if(result.Occupied === 1)
+            return res.status(500).json({"Message" : "It is not possible reserve seats"});
+        }
+        catch(error) {
+          return res.status(500).json(error);
+        }
+        break;
+      }
+      case 'regional': {
+        try {
+          const result = await AirplaneSeats_dao.getRegionalSeat(seat.Id, seat.Column);
+          if(result.Occupied == 1)
+            return res.status(500).json({"Message" : "It is not possible reserve seats"})
+        }
+        catch (error) {
+          return res.status(500).json(error)
+        }
+        break;
+      }
+      case 'international' : {
+        try {
+          const result = await AirplaneSeats_dao.getInternationalSeat(seat.Id, seat.Column);
+          if(result.Occupied==1)
+            return res.status(500).json({"Message" : "It is not possible reserve seats"})
+        }
+        catch (error) {
+          return res.status(500).json(error)
+        }
+        break;
+      }
+      default :
+        res.status(500).json({"Message" : "not valid plane"})
+        break;
+    }
+  }
+  for(const seat of seats){
+    switch(planeType){
+      case 'local': {
+        try{
+        const updatePlane = await AirplaneSeats_dao.reserveLocalSeats(seat.Id, seat.Column, 1);
+        const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
+        if(updatePlane.reserved && insertBooking.Booked)
+          return res.status(201).json({"Booking" : "Successfully"});
+        else 
+           return res.status(503).json({"Message" : "Impossible complete booking"});
+        }
+        catch (error){
+          return res.status(500).json(error);
+        }
+      }
+      case 'regional':{
+        try{
+          const updatePlane = await AirplaneSeats_dao.reserveRegionalSeats(seat.Id, seat.Column, 1);
+          const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
+          if(updatePlane.reserved && insertBooking.Booked)
+            return res.status(201).json({"Booking" : "Successfully"});
+          else 
+            return res.status(503).json({"Message" : "Impossible complete booking"});
+          }
+          catch (error){
+            return res.status(500).json(error);
+          }
+      }
+      case 'international': {
+        try{
+          const updatePlane = await AirplaneSeats_dao.reserveInternationalSeats(seat.Id, seat.Column, 1);
+          const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
+          if(updatePlane.reserved && insertBooking.Booked)
+            return res.status(201).json({"Booking" : "Successfully"});
+          else 
+            return res.status(503).json({"Message" : "Impossible complete booking"});
+          }
+          catch (error){
+            return res.status(500).json(error);
+          }
+      }
+      default:
+        return res.status(500).json({"Message" : "not valid plane"})
+    }
+  } 
 })

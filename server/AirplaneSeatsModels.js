@@ -27,17 +27,12 @@ function International(Id, A, B, C, D, E, F){
     this.F = F;
 }
 
-function Bookings(IdUser, IdReservation, Data){
-    this.IdReservation = IdReservation;
-    this.IdUser = IdUser;
-    this.Data = Data;
-}
-
-function Seats(Id, IdReservation, Seat, AirplaneType){
+function Bookings(Id, IdUser, SeatRow, SeatColumn, AirplaneType){
     this.Id = Id;
-    this.IdReservation = IdReservation;
-    this.Seat = Seat;
-    this.AirplaneType = AirplaneType
+    this.IdUser = IdUser;
+    this.SeatRow = SeatRow;
+    this.SeatColumn = SeatColumn;
+    this.AirplaneType = AirplaneType;
 }
 
-module.exports={Local, Regional, International, Bookings, Seats}
+module.exports={Local, Regional, International, Bookings}

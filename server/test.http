@@ -1,3 +1,17 @@
+###########################
+#                         #
+#      API LOG IN         #
+#                         #
+###########################
+#POST 
+POST http://localhost:3001/api/sessions
+
+###
+GET http://localhost:3001/api/sessions/current
+
+###
+DELETE http://localhost:3001/api/sessions/current
+
 #######################################
 #                                     #
 #       METHOD ON LOCAL PLANE         #
@@ -8,7 +22,7 @@ GET http://localhost:3001/api/local
 ###
 
 #GET to obtain info of a sigle seat
-GET http://localhost:3001/api/local/10/C
+GET http://localhost:3001/api/local/1/A
 ###
 
 #PATCH to reserve a seat
@@ -63,12 +77,34 @@ GET http://localhost:3001/api/international/25/C
 
 #PATCH to reserve a seat
 PATCH http://localhost:3001/api/international
-content-type : application/jsons
+content-type : application/json
 
 {
   "Id": 25,
   "Column" : "B",
-  "Reserve" : 0
+  "Reserve" : 1
 }
 ###
 
+#############################
+#                           # 
+#    API RESERVE SEATS      #
+#                           #
+#############################
+GET http://localhost:3001/api/bookings/3/international
+
+###
+POST http://localhost:3001/api/bookings
+content-type : application/json
+
+{
+  "IdUser": 1,
+  "PlaneType": "international",
+  "Seats": [
+    {
+      "Id": 1,
+      "Column": "A"
+    }
+  ]
+}
+###

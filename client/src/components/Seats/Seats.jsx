@@ -7,10 +7,13 @@ import { Table, Container } from "react-bootstrap";
 import { getSeatsInfo, patchReserveSeat } from "../../API";
 import "./index.css";
 import { useLocation } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
 
 function Seats() {
   const [seats, setSeats] = useState([]);
   const localtion = useLocation();
+  const [value, setValue] = useState([[]]);
+  
   useEffect(() => {
     const getSeats = async () => {
       let s = await getSeatsInfo(localtion.pathname);
@@ -23,25 +26,31 @@ function Seats() {
     seats,
     location.pathname
   );
+  const handleSubmit = (data) => {
+    data.preventDefault();
+  }
+  
+  console.log(value);
   return (
-    <Container>
+    <Form onSubmit={handleSubmit}>
       <Row>
-        <Col md={4}>
+        <Col md={5}>
           <Table borderless={true}>
             <tbody>
-              {seats.map((s) => (
+              {seats.map((s, i) => (
                 <tr key={s.Id}>
                   <ButtonRow
                     seat={s}
                     type={location.pathname}
-                    setSeats={setSeats}
+                    props={value[i]}
+                    setter={setValue}
                   />
                 </tr>
               ))}
             </tbody>
           </Table>
         </Col>
-        <Col md={5}>
+        <Col md={4}>
           <div>
             <span>
               Occupied seat :
@@ -77,141 +86,19 @@ function Seats() {
               />
             </span>
           </div>
+          <Container>
+            <Button variant="success" type="submit">
+              Submit
+            </Button>
+            <Button variant="danger" type="submit">
+              Cancel
+            </Button>
+          </Container>
         </Col>
       </Row>
-    </Container>
+    </Form>
   );
 }
-
-function ButtonRow({ seat, type, setSeats }) {
-  let colorA, colorB, colorC, colorD, colorE, colorF;
-  colorA = seat.A ? "danger" : "success";
-  colorB = seat.B ? "danger" : "success";
-  colorC = seat.C ? "danger" : "success";
-  colorD = seat.D ? "danger" : "success";
-
-  const button = [
-    <td key={1}>
-      <Button
-        variant={colorA}
-        className="sizebutton"
-        onClick={() =>
-          patchReserveSeat(seat.Id, "A", type).then(
-            getSeatsInfo(type).then((s) => setSeats(s))
-          )
-        }
-      >
-        {seat.Id}
-        {"A"}
-      </Button>
-    </td>,
-    <td key={2}>
-      <Button
-        variant={colorB}
-        className="sizebutton"
-        onClick={() =>
-          patchReserveSeat(seat.Id, "B", type).then(
-            getSeatsInfo(type).then((s) => setSeats(s))
-          )
-        }
-      >
-        {seat.Id}
-        {"B"}
-      </Button>
-    </td>,
-    <td key={3}>
-      <Button
-        variant={colorC}
-        className="sizebutton"
-        onClick={() =>
-          patchReserveSeat(seat.Id, "C", type).then(
-            getSeatsInfo(type).then((s) => setSeats(s))
-          )
-        }
-      >
-        {seat.Id}
-        {"C"}
-      </Button>
-    </td>,
-    <td key={4}>
-      <Button
-        variant={colorD}
-        className="sizebutton"
-        onClick={() =>
-          patchReserveSeat(seat.Id, "D", type).then(
-            getSeatsInfo(type).then((s) => setSeats(s))
-          )
-        }
-      >
-        {seat.Id}
-        {"D"}
-      </Button>
-    </td>,
-  ];
-
-  switch (type) {
-    case "/regional": {
-      colorE = seat.E ? "danger" : "success";
-      button.push(
-        <td key={5}>
-          <Button
-            variant={colorE}
-            className="sizebutton"
-            onClick={() =>
-              patchReserveSeat(seat.Id, "E", type).then(
-                getSeatsInfo(type).then((s) => setSeats(s))
-              )
-            }
-          >
-            {seat.Id}
-            {"E"}
-          </Button>
-        </td>
-      );
-      return <>{button.map((b) => b)}</>;
-    }
-    case "/international": {
-      colorE = seat.E ? "danger" : "success";
-      colorF = seat.F ? "danger" : "success";
-      button.push(
-        <td key={5}>
-          <Button
-            variant={colorE}
-            className="sizebutton"
-            onClick={() =>
-              patchReserveSeat(seat.Id, "E", type).then(
-                getSeatsInfo(type).then((s) => setSeats(s))
-              )
-            }
-          >
-            {seat.Id}
-            {"E"}
-          </Button>
-        </td>
-      );
-      button.push(
-        <td key={6}>
-          <Button
-            variant={colorF}
-            className="sizebutton"
-            onClick={() =>
-              patchReserveSeat(seat.Id, "F", type).then(
-                getSeatsInfo(type).then((s) => setSeats(s))
-              )
-            }
-          >
-            {seat.Id}
-            {"F"}
-          </Button>
-        </td>
-      );
-      return <>{button.map((b) => b)}</>;
-    }
-    default:
-      return <>{button.map((b) => b)}</>;
-  }
-}
-
 
 function occupiedAvaibleTotalSeat(seats, type) {
   let occupiedSeat = 0,
@@ -240,3 +127,120 @@ function occupiedAvaibleTotalSeat(seats, type) {
 }
 
 export default Seats;
+
+//import { useState } from 'react';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+
+function ButtonRow({ seat, type, props, setter }) {
+  const handleChange = (val) => setter(val);
+  let colorA, colorB, colorC, colorD, colorE, colorF;
+  colorA = seat.A ? "danger" : "success";
+  colorB = seat.B ? "danger" : "success";
+  colorC = seat.C ? "danger" : "success";
+  colorD = seat.D ? "danger" : "success";
+  const button = [
+      <ToggleButton
+        id={seat.Id+"A"}
+        key={seat.Id+"A"}
+        variant={colorA}
+        className="sizebutton"
+        value={1}
+        disabled={colorA === "danger"}
+        
+      >
+        {seat.Id}
+        {"A"}
+      </ToggleButton>,
+      <ToggleButton
+        id={seat.Id+"B"}
+        key={seat.Id+"B"}
+        variant={colorB}
+        className="sizebutton"
+        value={2}
+        disabled={colorB === "danger"}
+      >
+        {seat.Id}
+        {"B"}
+      </ToggleButton>,
+      <ToggleButton
+        id={seat.Id+"C"}
+        key={seat.Id+"C"}
+        variant={colorC}
+        className="sizebutton"
+        value={3}
+        disabled={colorC === "danger"}
+      >
+        {seat.Id}
+        {"C"}
+      </ToggleButton>,
+      <ToggleButton
+        id={seat.Id+"D"}
+        key={seat.Id+"D"}
+        variant={colorD}
+        className="sizebutton"
+        value={4}
+        disabled={colorD === "danger"}
+      >
+        {seat.Id}
+        {"D"}
+      </ToggleButton>
+  ];
+  switch (type) {
+    case "/regional": {
+      colorE = seat.E ? "danger" : "success";
+      button.push(
+          <ToggleButton
+            id={seat.Id+"E"}
+            key={seat.Id+"E"}
+            variant={colorE}
+            className="sizebutton"
+            value={5}
+            disabled={colorE === "danger"}
+          >
+            {seat.Id}
+            {"E"}
+          </ToggleButton>
+      );
+      break;
+    }
+    case "/international": {
+      colorE = seat.E ? "danger" : "success";
+      colorF = seat.F ? "danger" : "success";
+      button.push(
+          <ToggleButton
+            id={seat.Id+"E"}
+            key={seat.Id+"E"}
+            variant={colorE}
+            className="sizebutton"
+            value={5}
+            disabled={colorE === "danger"}
+          >
+            {seat.Id}
+            {"E"}
+          </ToggleButton>
+      );
+      button.push(
+          <ToggleButton
+            id={seat.Id+"F"}
+            key={seat.Id+"F"}
+            variant={colorF}
+            className="sizebutton"
+            value={6}
+            disabled={colorF === "danger"}
+          >
+            {seat.Id}
+            {"F"}
+          </ToggleButton>
+      );
+      break;
+    }
+    default:
+      break;
+  }
+  return (
+    <ToggleButtonGroup type="checkbox" value={props} onChange={handleChange}>
+      {button.map(b => b)}
+    </ToggleButtonGroup>
+  )
+}
