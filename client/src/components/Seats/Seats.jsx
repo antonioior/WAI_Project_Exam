@@ -4,15 +4,19 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useState, useEffect } from "react";
 import { Table, Container } from "react-bootstrap";
-import { getSeatsInfo, patchReserveSeat } from "../../API";
+import { getSeatsInfo, reserveSeats} from "../../API";
 import "./index.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
-
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import { useAuth } from "../AuthContext";
 function Seats() {
   const [seats, setSeats] = useState([]);
   const localtion = useLocation();
-  const [value, setValue] = useState([[]]);
+  const navigation = useNavigate();
+  const [reservation, setReservation] = useState([]);
+  const {user} = useAuth();
   
   useEffect(() => {
     const getSeats = async () => {
@@ -20,17 +24,24 @@ function Seats() {
       setSeats(s);
     };
     getSeats();
-  }, []);
+  }, [localtion.pathname]);
 
+  const handleSubmit = async (data) => {
+    data.preventDefault();
+    const result = reservation.map(x => ({Id : x.slice(0, x.length-1), Column : x[x.length-1]}));
+    if(!user)
+      navigation('/login', {replace : true})
+    reserveSeats(user.id, location.pathname.slice(1), result)
+      .then(() => navigation('/reservation', {replace : true}))
+  }
+  //To perform seats occupied avaible and total for every plane
   const [occupiedSeat, avaibleSeat, totalSeat] = occupiedAvaibleTotalSeat(
     seats,
     location.pathname
   );
-  const handleSubmit = (data) => {
-    data.preventDefault();
-  }
   
-  console.log(value);
+  //Return
+  //console.log(value);
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -42,8 +53,8 @@ function Seats() {
                   <ButtonRow
                     seat={s}
                     type={location.pathname}
-                    props={value[i]}
-                    setter={setValue}
+                    props={reservation}
+                    setter={setReservation}
                   />
                 </tr>
               ))}
@@ -87,7 +98,7 @@ function Seats() {
             </span>
           </div>
           <Container>
-            <Button variant="success" type="submit">
+            <Button variant="success" type="submit" onSubmit={handleSubmit}>
               Submit
             </Button>
             <Button variant="danger" type="submit">
@@ -128,12 +139,14 @@ function occupiedAvaibleTotalSeat(seats, type) {
 
 export default Seats;
 
-//import { useState } from 'react';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+
 
 function ButtonRow({ seat, type, props, setter }) {
-  const handleChange = (val) => setter(val);
+
+  const handleChange = (val) => {
+    console.log(val);
+    setter(val);
+  }
   let colorA, colorB, colorC, colorD, colorE, colorF;
   colorA = seat.A ? "danger" : "success";
   colorB = seat.B ? "danger" : "success";
@@ -145,7 +158,7 @@ function ButtonRow({ seat, type, props, setter }) {
         key={seat.Id+"A"}
         variant={colorA}
         className="sizebutton"
-        value={1}
+        value={seat.Id+"A"}
         disabled={colorA === "danger"}
         
       >
@@ -157,7 +170,7 @@ function ButtonRow({ seat, type, props, setter }) {
         key={seat.Id+"B"}
         variant={colorB}
         className="sizebutton"
-        value={2}
+        value={seat.Id+"B"}
         disabled={colorB === "danger"}
       >
         {seat.Id}
@@ -168,7 +181,7 @@ function ButtonRow({ seat, type, props, setter }) {
         key={seat.Id+"C"}
         variant={colorC}
         className="sizebutton"
-        value={3}
+        value={seat.Id+"C"}
         disabled={colorC === "danger"}
       >
         {seat.Id}
@@ -179,7 +192,7 @@ function ButtonRow({ seat, type, props, setter }) {
         key={seat.Id+"D"}
         variant={colorD}
         className="sizebutton"
-        value={4}
+        value={seat.Id+"D"}
         disabled={colorD === "danger"}
       >
         {seat.Id}
@@ -195,7 +208,7 @@ function ButtonRow({ seat, type, props, setter }) {
             key={seat.Id+"E"}
             variant={colorE}
             className="sizebutton"
-            value={5}
+            value={seat.Id+"E"}
             disabled={colorE === "danger"}
           >
             {seat.Id}
@@ -213,7 +226,7 @@ function ButtonRow({ seat, type, props, setter }) {
             key={seat.Id+"E"}
             variant={colorE}
             className="sizebutton"
-            value={5}
+            value={seat.Id+"E"}
             disabled={colorE === "danger"}
           >
             {seat.Id}
@@ -226,7 +239,7 @@ function ButtonRow({ seat, type, props, setter }) {
             key={seat.Id+"F"}
             variant={colorF}
             className="sizebutton"
-            value={6}
+            value={seat.Id+"F"}
             disabled={colorF === "danger"}
           >
             {seat.Id}

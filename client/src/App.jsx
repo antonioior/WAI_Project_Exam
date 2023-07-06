@@ -13,8 +13,9 @@ import {
 } from "react-router-dom";
 import Seats from "./components/Seats/Seats";
 import { AuthProvider } from "./components/AuthContext";
-import Login from './components/AuthComponent'
+import Login from './components/LoginComponent'
 import MyReservation from "./components/MyReservationComponent";
+
 function App() {
   return (
     <BrowserRouter>

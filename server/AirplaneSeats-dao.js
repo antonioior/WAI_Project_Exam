@@ -308,3 +308,16 @@ exports.deleteBooking =(IdUser, AirplaneType) => {
     });
   });
 }
+
+exports.getBookingByUser = (user) => {
+  let query = "SELECT DISTINCT AirplaneType FROM Bookings WHERE IdUser=?";
+  return new Promise((resolve, reject) => {
+    db.all(query, [user], (err, rows) => {
+      if(err)
+        reject(err);
+      const result = []
+      rows.map(x => result.push(x.AirplaneType))
+      resolve(result);
+    });
+  });
+}

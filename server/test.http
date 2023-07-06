@@ -98,7 +98,7 @@ POST http://localhost:3001/api/bookings
 content-type : application/json
 
 {
-  "IdUser": 1,
+  "IdUser": 2,
   "PlaneType": "international",
   "Seats": [
     {
@@ -115,4 +115,7 @@ content-type : application/json
   "IdUser" : 1,
   "AirplaneType" : "international"
 }
+###
+GET http://localhost:3001/api/bookings/1
+
 ###

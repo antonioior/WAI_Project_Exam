@@ -70,7 +70,6 @@ const isLoggedIn = (req, res, next) => {
   if(req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
   return res.status(401).json({error: 'Not authorized'});
 }
 
@@ -106,7 +105,7 @@ app.post('/api/sessions', function(req, res, next) {
 
 // GET /api/sessions/current
 //This route check if the user is logged in or not
-app.get('/api/sessions/current', (req, res) => {
+app.get('/api/sessions/current',isLoggedIn, (req, res) => {
   if(req.isAuthenticated()) {
     res.json(req.user);}
   else
@@ -134,8 +133,8 @@ const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
 
 //GET /api/local
 //return all seat of airplane of type local
-app.get('/api/local', async (req, res) => {
-  await AirplaneSeats_dao.getLocalSeats()
+app.get('/api/local',  (req, res) => {
+  AirplaneSeats_dao.getLocalSeats()
     .then(seats => {
       res.status(200).json(seats);
     })
@@ -145,8 +144,8 @@ app.get('/api/local', async (req, res) => {
 
 //GET /api/local
 //return the info of a single seat
-app.get('/api/local/:id/:column', async(req, res) => {
-  await AirplaneSeats_dao.getLocalSeat(req.params.id, req.params.column)
+app.get('/api/local/:id/:column', (req, res) => {
+  AirplaneSeats_dao.getLocalSeat(req.params.id, req.params.column)
     .then(seat => {
       res.status(200).json(seat);
     })
@@ -174,8 +173,8 @@ app.patch('/api/local', async (req, res) => {
 
 //GET /api/regional
 //return all seat of airplane of type regional
-app.get('/api/regional', async (req, res)=>{
-  await AirplaneSeats_dao.getRegionalSeats()
+app.get('/api/regional', (req, res)=>{
+  AirplaneSeats_dao.getRegionalSeats()
     .then(seats => {
       res.status(200).json(seats);
     })
@@ -184,8 +183,8 @@ app.get('/api/regional', async (req, res)=>{
 
 //GET /api/local
 //return the info of a single seat
-app.get('/api/regional/:id/:column', async(req, res) => {
-  await AirplaneSeats_dao.getRegionalSeat(req.params.id, req.params.column)
+app.get('/api/regional/:id/:column', (req, res) => {
+  AirplaneSeats_dao.getRegionalSeat(req.params.id, req.params.column)
     .then(seat => {
       res.status(200).json(seat);
     })
@@ -256,7 +255,7 @@ app.get('/api/bookings/:IdUser/:AirplaneType', async(req, res) => {
 //POST to reserve one or more seat
 //flag 1 the value in the table of airplane
 //add a record 
-app.post('/api/bookings', async(req, res) => {
+app.post('/api/bookings', isLoggedIn, async(req, res) => {
   const idUser = req.body.IdUser;
   const seats = req.body.Seats;
   const planeType = req.body.PlaneType;
@@ -347,7 +346,7 @@ app.post('/api/bookings', async(req, res) => {
   } 
 })
 
-app.delete('/api/bookings', async(req, res) => {
+app.delete('/api/bookings', isLoggedIn, async(req, res) => {
   const idUser = req.body.IdUser;
   const airplaneType = req.body.AirplaneType;
   try {
@@ -393,4 +392,12 @@ app.delete('/api/bookings', async(req, res) => {
     return res.status(503).json({"message" : "error"});
   }
   
+})
+
+app.get('/api/bookings/:IdUser', isLoggedIn,(req, res) => {
+  AirplaneSeats_dao.getBookingByUser(req.params.IdUser)
+    .then(booking => {
+      res.status(200).json(booking);
+    })
+    .catch(() => res.status(500).json(err));
 })

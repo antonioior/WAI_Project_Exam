@@ -1,34 +1,52 @@
+import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
+import {getReservationByUser} from '../API';
+import { useNavigate } from 'react-router-dom';
+import {useAuth} from './AuthContext';
 
-function MyReservation() {
+function MyReservation(props) {
+  const[reservation, setReservation] = useState([]);
+  const navigation = useNavigate();
+  const {user} =useAuth();
+  useEffect(() => {
+    console.log(user);
+    if(!user)
+      navigation("/login", {replace :true})
+    
+    const reservation = async () => {
+      const result = await getReservationByUser(user.id);
+      console.log(result);
+      setReservation(result);  
+    }
+    reservation();
+  }, []);
+
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
-        <Accordion.Header>Accordion Item #1</Accordion.Header>
+        <Accordion.Header>Local</Accordion.Header>
         <Accordion.Body>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          {reservation.map(x => x.AirplaneType )}
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="1">
-        <Accordion.Header>Accordion Item #2</Accordion.Header>
+        <Accordion.Header>Regional</Accordion.Header>
         <Accordion.Body>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          {reservation.map(x => x.AirplaneType)}
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="2">
+        <Accordion.Header>International</Accordion.Header>
+        <Accordion.Body>
+          {reservation.map(x => x.AirplaneType)}
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
   );
 }
+
+
+
+
 
 export default MyReservation;
