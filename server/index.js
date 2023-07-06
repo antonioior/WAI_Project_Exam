@@ -395,7 +395,7 @@ app.delete('/api/bookings', isLoggedIn, async(req, res) => {
   
 })
 
-app.get('/api/bookings/:IdUser', isLoggedIn,(req, res) => {
+app.get('/api/bookings/:IdUser', isLoggedIn, (req, res) => {
   AirplaneSeats_dao.getBookingByUser(req.params.IdUser)
     .then(booking => {
       res.status(200).json(booking);
