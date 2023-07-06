@@ -91,7 +91,7 @@ content-type : application/json
 #    API RESERVE SEATS      #
 #                           #
 #############################
-GET http://localhost:3001/api/bookings/3/international
+GET http://localhost:3001/api/bookings/1/local
 
 ###
 POST http://localhost:3001/api/bookings

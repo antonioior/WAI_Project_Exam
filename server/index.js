@@ -259,6 +259,9 @@ app.post('/api/bookings', isLoggedIn, async(req, res) => {
   const idUser = req.body.IdUser;
   const seats = req.body.Seats;
   const planeType = req.body.PlaneType;
+  const alreadyReservation = await AirplaneSeats_dao.getBookingByUserIdAndByPlane(idUser, planeType);
+  if(alreadyReservation.length > 0)
+    return res.status(500).json({"Message" : "You have altready a reservation"});
   for (const seat of seats){
     switch(planeType) {
       case 'local': {
@@ -305,45 +308,43 @@ app.post('/api/bookings', isLoggedIn, async(req, res) => {
         try{
         const updatePlane = await AirplaneSeats_dao.reserveLocalSeats(seat.Id, seat.Column, 1);
         const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
-        if(updatePlane.reserved && insertBooking.Booked)
-          return res.status(201).json({"Booking" : "Successfully"});
-        else 
+        if(!updatePlane.reserved || !insertBooking.Booked)
            return res.status(503).json({"Message" : "Impossible complete booking"});
         }
         catch (error){
           return res.status(500).json(error);
         }
+        break; 
       }
       case 'regional':{
         try{
           const updatePlane = await AirplaneSeats_dao.reserveRegionalSeats(seat.Id, seat.Column, 1);
           const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
-          if(updatePlane.reserved && insertBooking.Booked)
-            return res.status(201).json({"Booking" : "Successfully"});
-          else 
+          if(!updatePlane.reserved || !insertBooking.Booked) 
             return res.status(503).json({"Message" : "Impossible complete booking"});
-          }
-          catch (error){
-            return res.status(500).json(error);
-          }
+        }
+        catch (error){
+          return res.status(500).json(error);
+        }
+        break;
       }
       case 'international': {
         try{
           const updatePlane = await AirplaneSeats_dao.reserveInternationalSeats(seat.Id, seat.Column, 1);
           const insertBooking = await AirplaneSeats_dao.insertBookings(idUser, seat.Id, seat.Column, planeType);
-          if(updatePlane.reserved && insertBooking.Booked)
-            return res.status(201).json({"Booking" : "Successfully"});
-          else 
+          if(!updatePlane.reserved || !insertBooking.Booked) 
             return res.status(503).json({"Message" : "Impossible complete booking"});
           }
-          catch (error){
-            return res.status(500).json(error);
-          }
+        catch (error){
+          return res.status(500).json(error);
+        }
+        break;
       }
       default:
         return res.status(500).json({"Message" : "not valid plane"})
     }
-  } 
+  }
+  return res.status(201).json({"Message" : "Booked successfully"}) 
 })
 
 app.delete('/api/bookings', isLoggedIn, async(req, res) => {
