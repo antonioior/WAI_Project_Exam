@@ -8,11 +8,11 @@ function MyReservation(props) {
   const[reservation, setReservation] = useState([]);
   const navigation = useNavigate();
   const {user} =useAuth();
+
   useEffect(() => {
-    console.log(user);
     if(!user)
       navigation("/login", {replace :true})
-    
+      
     const reservation = async () => {
       const result = await getReservationByUser(user.id);
       console.log(result);

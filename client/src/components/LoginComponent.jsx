@@ -23,9 +23,8 @@ function Login() {
       username: email,
       password: password
     })
-    const status = getSession();
-    if(status)
-      navigation("/login", {replace :true})
+    if(user)
+      navigation('/', {replace : true})
   }
 
   return (
