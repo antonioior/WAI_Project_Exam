@@ -24,8 +24,7 @@ function Login() {
       username: email,
       password: password
     })
-    if(user)
-      navigation('/', {replace : true})
+    navigation('/', {replace : true})
   }
 
   return (

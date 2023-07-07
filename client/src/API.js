@@ -74,6 +74,9 @@ export const deleteSeats = async(idUser, planeType) => {
   const response = await fetch(`${SERVER_URL}/api/bookings`, {
     method : 'DELETE',
     credentials : 'include',
+    headers: {
+      "Content-Type": "application/json",
+    },
     body : JSON.stringify({
       "IdUser" : idUser,
       "AirplaneType" : planeType

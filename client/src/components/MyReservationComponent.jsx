@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
-import { getReservationByUser } from "../API";
+import { deleteSeats, getReservationByUser } from "../API";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import Button from "react-bootstrap/Button";
@@ -11,51 +11,28 @@ function MyReservation(props) {
   const navigation = useNavigate();
   const { user } = useAuth();
 
+  if(!user) navigation("/login", {replace : true}); 
+  
   useEffect(() => {
-    if (!user) navigation("/login", { replace: true });
-
-    const reservation = async () => {
-      const plane = [
-        {Id : 0, planeType : "Local",  value : ""},
-        {Id : 1, planeType : "Regional", value : ""},
-        {Id : 2, planeType : "International", value : ""}];
-      const result = await getReservationByUser(user.id);
-      for (const res of result) {
-        if (res === "local") plane[0].value = "You have a reservation";
-        else if (res === "regional") plane[1].value = "You have a reservation";
-        else plane[2].value = "You have a reservation";
-      }
-      setReservation(plane);
+    console.log(user.id);
+    const getReservation = async() => {
+      let result = await getReservationByUser(user.id);
+      setReservation(result);
     };
-    reservation();
-  }, [reservation]);
+    getReservation();
+  }, []);
 
-  const handleClick = async (data) => {
-    data.preventDefault();
-    console.log(data);
-    // switch(key){
-    //   case 1:
-    //     deleteSeats(user.id, 'local')
-    //     break;
-    //   case 2:
-    //     deleteSeats(user.id,'regional')
-    //     break;
-    //   case 3:
-    //     deleteSeats(user.id, 'international')
-    //     break
-    // }
-    
-  }
 
   console.log(reservation )
   return (
-    <Form onClick={handleClick}>
+    <Form>
       <Accordion defaultActiveKey="0">
         <div>
           {reservation.map((x) =>(
             <PrintReservation 
             key={x.Id}
-            reserve={x} 
+            reserve={x}
+            userId = {user.id} 
             />
           ))}
         </div>
@@ -64,17 +41,21 @@ function MyReservation(props) {
   );
 }
 
-function PrintReservation({ reserve }) {
-  console.log(reserve);
+function PrintReservation({ reserve, userId }) {
+  const handleClick = async(event) => {
+    event.preventDefault();
+    console.log(userId);
+    const res = await deleteSeats(userId, reserve);
+  }
+
   return(<Accordion.Item eventKey={reserve.Id}>
-    <Accordion.Header>{reserve.planeType}</Accordion.Header>
+    <Accordion.Header>{reserve}</Accordion.Header>
       <Accordion.Body>
-        {reserve.value}
-      <Button 
-        variant="danger"
-        disabled={reserve.value === ""}>
-        Delete
-      </Button>
+        <Button onClick={handleClick}
+          variant="danger"
+          disabled={reserve.value === ""}>
+          Delete
+        </Button>
     </Accordion.Body>
   </Accordion.Item>
   )

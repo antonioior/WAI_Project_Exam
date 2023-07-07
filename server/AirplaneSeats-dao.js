@@ -305,6 +305,7 @@ exports.deleteBooking =(IdUser, AirplaneType) => {
     db.run(query, [IdUser, AirplaneType], function(err) {
       if(err)
         reject(err);
+      resolve({"Deleted" : 1})
     });
   });
 }

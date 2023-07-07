@@ -55,7 +55,7 @@ function NavBar() {
             </NavDropdown>
             {user ? 
               <Button variant='secondary' onClick={() => {
-                logout().then(() => {if (location.pathname !== "/") navigate("/")})}}>Logout</Button> : 
+                logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>Logout</Button> : 
               <Button href="/login" className="mt-3" variant="secondary">Login</Button>}
           </Nav>
         </Navbar.Collapse>
