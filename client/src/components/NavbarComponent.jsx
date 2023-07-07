@@ -3,8 +3,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Login from './LoginComponent';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {Form, Button} from 'react-bootstrap';
+import {useAuth} from "./AuthContext"
+
 function NavBar() {
+  const {user, logout} = useAuth();
+  const navigation = useNavigate();
+
+  console.log(user)
+
   return (
     <Navbar expand="sm" sticky="top" className="bg-body-tertiary">
       <Container>
@@ -45,6 +53,10 @@ function NavBar() {
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
+            {user ? 
+              <Button variant='secondary' onClick={() => {
+                logout().then(() => {if (location.pathname !== "/") navigate("/")})}}>Logout</Button> : 
+              <Button href="/login" className="mt-3" variant="secondary">Login</Button>}
           </Nav>
         </Navbar.Collapse>
       </Container>

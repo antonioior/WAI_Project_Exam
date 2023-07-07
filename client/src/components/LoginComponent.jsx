@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext';
 import {Link, useNavigate} from "react-router-dom";
 import { useEffect } from 'react';
 import {getSession} from '../API';
+
 function Login() {
   const {user, login} = useAuth();
   const navigation = useNavigate();

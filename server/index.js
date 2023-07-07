@@ -114,7 +114,7 @@ app.get('/api/sessions/current',isLoggedIn, (req, res) => {
 
 // DELETE /api/session/current
 //This route checks that user is logged in or not
-app.delete('/api/sessions/current', (req, res) => {
+app.delete('/api/sessions/current', isLoggedIn,(req, res) => {
   req.logout(() => {
     res.end();
   });
