@@ -11,7 +11,9 @@ export async function login(userData) {
     },
     body: JSON.stringify(userData),
   })
-  return await response.json();
+  if(response.ok)
+    return await response.json();
+  throw await response.json();
 }
 
 //GET SESSION
@@ -19,7 +21,9 @@ export async function getSession() {
   const response = await fetch(`${SERVER_URL}/api/sessions/current`,{
     method: "GET",
     credentials: "include" });
-  return await response.json();
+  if(response.ok)
+    return await response.json();
+  throw await response.json();
 }
 
 //LOGOUT
@@ -27,7 +31,10 @@ export async function logout() {
   const response = await fetch(`${SERVER_URL}/api/sessions/current`, {
     method: "DELETE",
     credentials: "include" });
-  return await response.json();
+
+  if(response.ok)
+    return await response.json();
+  throw await response.json();
 }
 
 //API GET SEATSINFO
@@ -38,11 +45,10 @@ export const getSeatsInfo = async (planeType) =>{
     method : 'GET',
     });
   const seatsInfo = await response.json();
-  if(response.ok){
+  console.log(response)
+  if(response.ok)
     return seatsInfo;
-  }
-  else
-    throw seatsInfo;  //give an error
+  throw new Error('Internal server error');  //give an error
 }
 
 //API TO VIEW THE RESERVATION OF A USER
@@ -50,7 +56,10 @@ export const getReservationByUser = async (IdUser) =>{
   const response = await fetch(`${SERVER_URL}/api/bookings/${IdUser}`, {
     method :"GET",
     credentials : "include"});
-  return await response.json();
+    
+  if(response.ok)
+    return await response.json();
+  throw new Error("Internal server error");
 }
 
 //API TO RESERVE SEAT
@@ -67,6 +76,8 @@ export const reserveSeats = async (idUser, planeType, seats) => {
       "Seats" : seats
     })
   })
+  if(!response.ok)
+    throw await response.json();
 } 
 
 //API TO DELETE RESERVATION ON A PLANE
@@ -82,4 +93,6 @@ export const deleteSeats = async(idUser, planeType) => {
       "AirplaneType" : planeType
     })
   })
+  if(!response.ok)
+    throw await response.json();
 }

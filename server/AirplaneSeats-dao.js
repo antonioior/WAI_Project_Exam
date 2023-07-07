@@ -252,7 +252,6 @@ exports.reserveInternationalSeats = (Id, column, reserve) => {
       query = 'UPDATE International SET F = ? WHERE Id = ?';
       break;
     default:
-      reject(err);
       break;
   }
   return new Promise((resolve, reject) => {
