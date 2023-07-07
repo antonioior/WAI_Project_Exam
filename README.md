@@ -87,7 +87,6 @@
     ]
   ```
 
-
 - __GET__ `/api/bookings/:IdUser` - get the type of plane where IdUser has a reservation
   - Prerequisite: User is logged in 
   - Response Status : `200` OK, `500` Internal Server Error
@@ -120,13 +119,6 @@
     {
       "IdUser": Int - IdUser,
       "PlaneType": String - (local/regional/international),
-      "Seats": [
-        {
-          "Id": Int - Number row of seat,
-          "Column": String - Letter of seat
-        },
-        {...}
-      ]
     }
   -Response Status : `200` Ok, `304` Not Modified, `400` Bad request in db, `503` Service Unavailable
   -Response Body : {"message" : "deleted with success"}
