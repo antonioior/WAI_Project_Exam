@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../AuthComponent";
 
 function Seats() {
   const [seats, setSeats] = useState([]);

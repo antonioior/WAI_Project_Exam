@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
-import { useAuth } from './AuthContext';
+import { useAuth } from './AuthComponent';
 import {Link, useNavigate} from "react-router-dom";
 import { useEffect } from 'react';
 import {getSession} from '../API';
