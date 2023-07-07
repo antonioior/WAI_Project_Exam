@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form';
 
 function MyReservation(props) {
+  let count=0;
   const [reservation, setReservation] = useState([]);
   const navigation = useNavigate();
   const { user } = useAuth();
@@ -33,6 +34,7 @@ function MyReservation(props) {
             key={x.Id}
             reserve={x}
             userId = {user.id} 
+            count = {count++}
             />
           ))}
         </div>
@@ -41,14 +43,17 @@ function MyReservation(props) {
   );
 }
 
-function PrintReservation({ reserve, userId }) {
+function PrintReservation({ reserve, userId, count }) {
   const handleClick = async(event) => {
     event.preventDefault();
     console.log(userId);
     const res = await deleteSeats(userId, reserve);
   }
 
-  return(<Accordion.Item eventKey={reserve.Id}>
+  console.log(count)
+
+  return(
+  <Accordion.Item eventKey={count}>
     <Accordion.Header>{reserve}</Accordion.Header>
       <Accordion.Body>
         <Button onClick={handleClick}

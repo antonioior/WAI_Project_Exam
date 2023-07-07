@@ -43,11 +43,6 @@ function NavBar() {
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Link to="/login">
-                  Login
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
                 <Link to="/reservation">
                   My reservation
                 </Link>
@@ -55,7 +50,7 @@ function NavBar() {
             </NavDropdown>
             {user ? 
               <Button variant='secondary' onClick={() => {
-                logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>Logout</Button> : 
+                logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>{user.name}</Button> : 
               <Button href="/login" className="mt-3" variant="secondary">Login</Button>}
           </Nav>
         </Navbar.Collapse>
