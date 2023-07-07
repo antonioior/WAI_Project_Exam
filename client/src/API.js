@@ -32,9 +32,8 @@ export async function logout() {
     method: "DELETE",
     credentials: "include" });
 
-  if(response.ok)
-    return await response.json();
-  throw await response.json();
+  if(!response.ok)
+    throw await response.json();
 }
 
 //API GET SEATSINFO

@@ -137,30 +137,6 @@ app.get('/api/local',  (req, res) => {
     .catch(() => res.status(500).json(err));
 });
 
-
-//GET /api/local
-//return the info of a single seat
-// app.get('/api/local/:id/:column', (req, res) => {
-//   AirplaneSeats_dao.getLocalSeat(req.params.id, req.params.column)
-//     .then(seat => {
-//       res.status(200).json(seat);
-//     })
-//     .catch(() => res.status(500).json(err));
-// })
-
-
-//PATCH /api/local
-// app.patch('/api/local', async (req, res) => {
-//   try {
-//     const result = await AirplaneSeats_dao.reserveLocalSeats(req.body.Id, req.body.Column, req.body.Reserve);
-//     return res.status(201).json(result)
-//   }
-//   catch(e){
-//     return res.status(401).json({error : "It is not possible reserve seat"})
-//   }
-// })
-
-
 /****************************/
 /*                          */
 /*    API REGIONAL PLANE    */
@@ -176,27 +152,6 @@ app.get('/api/regional', (req, res)=>{
     })
     .catch(() => res.status(500).json(err))
 })
-
-//GET /api/local
-//return the info of a single seat
-// app.get('/api/regional/:id/:column', (req, res) => {
-//   AirplaneSeats_dao.getRegionalSeat(req.params.id, req.params.column)
-//     .then(seat => {
-//       res.status(200).json(seat);
-//     })
-//     .catch(() => res.status(500).json(err));
-// })
-
-//PATCH /api/regional
-// app.patch('/api/regional', async (req, res) => {
-//   try {
-//     const result = await AirplaneSeats_dao.reserveRegionalSeats(req.body.Id, req.body.Column, req.body.Reserve);
-//     return res.status(201).json(result);
-//   }
-//   catch(e){
-//     return res.status(401).json({error : "It is not possible reserve seat"});
-//   }
-// })
 
 
 /****************************/
@@ -214,39 +169,20 @@ app.get('/api/international', async (req, res) => {
     .catch(() => res.status(500).jsno(err))
 })
 
-//GET /api/international
-//return info about one seat
-// app.get('/api/international/:id/:column', async(req, res) => {
-//   await AirplaneSeats_dao.getInternationalSeat(req.params.id, req.params.column)
-//     .then(seat => {
-//       res.status(200).json(seat);
-//     })
-//     .catch(() => res.status(500).json(err));
-// })
-
-//PATCH /api/international
-// app.patch('/api/international', async (req, res) => {
-//   try{
-//     const result = await AirplaneSeats_dao.reserveInternationalSeats(req.body.Id, req.body.Column, req.body.Reserve);
-//     return res.status(200).json(result);
-//   }
-//   catch(e){
-//     return res.status(304).json({error : "It is not possible reserve seat"});
-//   }
-// })
 
 /****************************/
 /*                          */
 /*    API RESERVE SEATS     */
 /*                          */
 /****************************/
-// app.get('/api/bookings/:IdUser/:AirplaneType', async(req, res) => {
-//   await AirplaneSeats_dao.getBookingByUserIdAndByPlane(parseInt(req.params.IdUser), req.params.AirplaneType)
-//     .then(reservation => {
-//       res.status(200).json(reservation);
-//     })
-//     .catch(() => res.status(500).json(err))
-// })
+//Get to obtain the plane where is a reservation of a specific plane
+app.get('/api/bookings/:IdUser', isLoggedIn, (req, res) => {
+  AirplaneSeats_dao.getBookingByUser(req.params.IdUser)
+    .then(booking => {
+      res.status(200).json(booking);
+    })
+    .catch(() => res.status(500).json(err));
+})
 
 //POST to reserve one or more seat
 //flag 1 the value in the table of airplane
@@ -337,7 +273,7 @@ app.post('/api/bookings', isLoggedIn, async(req, res) => {
         break;
       }
       default:
-        return res.status(500).json({"Message" : "not valid plane"})
+        return res.status(400).json({"Message" : "not valid plane"})
     }
   }
   return res.status(201).json({"Message" : "Booked successfully"}) 
@@ -378,23 +314,15 @@ app.delete('/api/bookings', isLoggedIn, async(req, res) => {
           break;
         }
         default: {
-          return res.status(500).json({"message" : "plane not valid"});
+          return res.status(400).json({"message" : "plane not valid"});
         }
       }
     }
     await AirplaneSeats_dao.deleteBooking(idUser, airplaneType);
-    return res.status(202).json({"message" : "deleted with success"})
+    return res.status(200).json({"message" : "deleted with success"})
   }
   catch(err){
     return res.status(503).json({"message" : "error"});
   }
   
-})
-
-app.get('/api/bookings/:IdUser', isLoggedIn, (req, res) => {
-  AirplaneSeats_dao.getBookingByUser(req.params.IdUser)
-    .then(booking => {
-      res.status(200).json(booking);
-    })
-    .catch(() => res.status(500).json(err));
 })

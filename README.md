@@ -12,17 +12,168 @@
 - Route `/reservation`: shows reservation of a specific user, but he must be logged
 
 ## API Server
+- __GET__ `/api/local` - get information about the seats, if available or not, of a local plane. 
+  - Response Status : `200` OK, `500` Internal Server Error
+  - Response Body :
+  ```
+    [
+      {
+        "Id": 1,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      {
+        "Id": 2,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      {...}
+    ]
+  ```  
 
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- GET `/api/something`
-  - request parameters
-  - response body content
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- ...
+- __GET__ `/api/regional` - get information about the seats, if available or not, of a regional plane. 
+  - Response Status : `200` OK, `500` Internal Server Error
+  - Response Body :
+  ```
+    [
+      {
+        "Id": 1,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0
+      },
+      {
+        "Id": 2,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0
+      },
+      {...}
+    ]
+  ```
+
+- __GET__ `/api/international` - get information about the seats, if available or not, of a international plane. 
+  - Response Status : `200` OK, `500` Internal Server Error
+  - Response Body :
+  ```
+    [
+      {
+        "Id": 1,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0,
+        "F": 0
+      },
+      {
+        "Id": 2,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0,
+        "F": 0
+      },
+      {...}
+    ]
+  ```
+
+
+- __GET__ `/api/bookings/:IdUser` - get the type of plane where IdUser has a reservation
+  - Prerequisite: User is logged in 
+  - Response Status : `200` OK, `500` Internal Server Error
+  - Response Body : 
+    [
+      "local",
+      "regional"
+    ]
+
+- __POST__ `/api/bookings`- to do a reservation on a specific plane
+  - Prerequisite: User is logged in
+  - Request body:
+    {
+      "IdUser": Int - IdUser,
+      "PlaneType": String - (local/regional/international),
+      "Seats": [
+        {
+          "Id": Int - Number row of seat,
+          "Column": String - Letter of seat
+        },
+        {...}
+      ]
+    }
+  - Response Status : `201` Created, `304` Not Modified, `400` Bad request in db, `500` Internal Server Error
+  - Response Body : {"Message" : "Booked successfully"}
+  
+- __DELETE__ `/api/bookings` - to delete a reservation on a specific plane
+  - Prerequisite: User is logged in
+  - Request body:
+    {
+      "IdUser": Int - IdUser,
+      "PlaneType": String - (local/regional/international),
+      "Seats": [
+        {
+          "Id": Int - Number row of seat,
+          "Column": String - Letter of seat
+        },
+        {...}
+      ]
+    }
+  -Response Status : `200` Ok, `304` Not Modified, `400` Bad request in db, `503` Service Unavailable
+  -Response Body : {"message" : "deleted with success"}
+
+### User login
+- __POST__ `/api/sessions`
+  - Method: POST
+  - Description: logs the user in, checking provided credentials
+  - Request body: an object containing the credentials provided by the login form
+    ```
+    {
+      "username":"antonio@polito.it",
+      "password":"12345678"
+    }
+    ```
+  - Response: `200 Ok` (if successful),  `401 Unauthorized` (login error)
+  - Response body: some info on the logged user
+    ```
+    {
+      "id":1,
+      "name":"antonio",
+      "email":"antonio@polito.it"
+    }
+    ```
+    
+### User logout
+- URL: '/api/sessions/current'
+  - Method: DELETE
+  - Description: logs the user out, deleting the session
+  - Request body: _None_
+  - Response: `200 Ok`
+  - Response body: _None_
+
+### Check login
+- URL: '/api/sessions/current'
+  - Method: GET
+  - Description: check whether the user is logged in or not
+  - Request body: _None_
+  - Response: `200 Ok` (if successul), `401 Unauthorized` (if not logged in)
+  - Response body: some info on the logged user
+      ```
+      {
+        "id":1,
+        "name":"antonio",
+        "email":"antonio@polito.it"
+      }
+      ```
 
 ## Database Tables
 
@@ -34,11 +185,23 @@
 
 ## Main React Components
 
-- `ListOfSomething` (in `List.js`): component purpose and main functionality
-- `GreatButton` (in `GreatButton.js`): component purpose and main functionality
-- ...
+### Seats.jsx
+- `Seats`: renders the page to show the seats reserved or not of plane
 
-(only _main_ components, minor ones may be skipped)
+### AuthComponent.jsx
+- `Login`: contains info to do login
+
+### LoginComponent.jsx
+- `LoginForm` : renders the page to insert e-mail and password to perform login
+
+### MainPageComponent.jsx
+- `MainPage` : contain all information to render the main page
+
+### MyReservationComponent
+- `ReservationComponent` : render the page where reservations of a specific user are seen
+
+### NavBarComponent.jsx
+- `NavBar` : renders the navbar and the icons at the top of the page
 
 ## Screenshot
 
@@ -46,7 +209,8 @@
 
 ## Users Credentials
 
-- username, 12345678 (plus any other requested info)
-- username, 12345678 (plus any other requested info)
-
+- antonio@polito.it, 12345678 (has reservartion in  and in )
+- marco@polito.it, 12345678 (has reservation in and in)
+- paolo@polito.it, 12345678 (no reservation)
+- matteo@polito.it, 12345678 (no reservation)
 

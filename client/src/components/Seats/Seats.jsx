@@ -11,26 +11,32 @@ import Form from 'react-bootstrap/Form';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { useAuth } from "../AuthContext";
+
 function Seats() {
   const [seats, setSeats] = useState([]);
   const localtion = useLocation();
   const navigation = useNavigate();
   const [reservation, setReservation] = useState([]);
   const {user} = useAuth();
+  const [seconds, setSeconds] = useState(0)
+
   useEffect(() => {
+    let interval = setInterval(() => {
+      setSeconds(seconds => seconds+1)}, 5000);
     const getSeats = async () => {
       let s = await getSeatsInfo(localtion.pathname);
       setSeats(s);
     };
     getSeats();
-  }, [localtion.pathname]);
+    setReservation([])
+  }, [seconds, localtion.pathname]);
 
   const handleSubmit = async (data) => {
     data.preventDefault();
     const result = reservation.map(x => ({Id : x.slice(0, x.length-1), Column : x[x.length-1]}));
     if(!user)
       navigation('/login', {replace : true})
-    const response = reserveSeats(user.id, location.pathname.slice(1), result)
+    reserveSeats(user.id, location.pathname.slice(1), result)
       .then(() => navigation('/reservation', {replace : true}))
   }
 
@@ -39,7 +45,6 @@ function Seats() {
     seats,
     location.pathname
   );
-  console.log(seats.length)
   //Return
   return (
     <Form onSubmit={handleSubmit}>

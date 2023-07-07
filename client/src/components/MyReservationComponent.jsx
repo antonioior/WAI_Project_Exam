@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import { deleteSeats, getReservationByUser } from "../API";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./AuthComponent";
 import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form';
 
@@ -12,7 +12,6 @@ function MyReservation() {
   const navigation = useNavigate();
   const { user } = useAuth();
 
-  // if(!user) navigation("/login", {replace : true}); 
   
   useEffect(() => {
     if(!user)
@@ -46,9 +45,11 @@ function MyReservation() {
 }
 
 function PrintReservation({ reserve, userId, count }) {
+  const navigation = useNavigate();
   const handleClick = async(event) => {
     event.preventDefault();
     const res = await deleteSeats(userId, reserve);
+    navigation('/', {replace : true})
   }
   return(
   <Accordion.Item eventKey={count}>

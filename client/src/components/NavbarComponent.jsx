@@ -10,6 +10,7 @@ import {useAuth} from "./AuthContext"
 function NavBar() {
   const {user, logout} = useAuth();
   const navigation = useNavigate();
+  console.log(user)
   return (
     <Navbar expand="sm" sticky="top" className="bg-body-tertiary">
       <Container>

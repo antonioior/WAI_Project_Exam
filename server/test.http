@@ -21,22 +21,6 @@ DELETE http://localhost:3001/api/sessions/current
 GET http://localhost:3001/api/local
 ###
 
-#GET to obtain info of a sigle seat
-GET http://localhost:3001/api/local/1/A
-###
-
-#PATCH to reserve a seat
-PATCH http://localhost:3001/api/local
-content-type: application/json
-
-{
-  "Id" : 1,
-  "Column" : "A",
-  "Reserve": 0
-}
-###
-
-
 #######################################
 #                                     #
 #       METHOD ON REGIONAL PLANE      #
@@ -46,20 +30,6 @@ content-type: application/json
 GET http://localhost:3001/api/regional
 ###
 
-#GET to obtain info of a sigle seat
-GET http://localhost:3001/api/regional/4/A
-###
-
-#PATCH to reserve a seat
-PATCH http://localhost:3001/api/regional
-content-type : application/json
-
-{
-  "Id": 6,
-  "Column" : "E",
-  "Reserve" : 0
-}
-###
 
 
 #######################################
@@ -71,27 +41,14 @@ content-type : application/json
 GET http://localhost:3001/api/international
 ###
 
-#GET to obtain info of a sigle seat
-GET http://localhost:3001/api/international/25/C
-###
-
-#PATCH to reserve a seat
-PATCH http://localhost:3001/api/international
-content-type : application/json
-
-{
-  "Id": 25,
-  "Column" : "B",
-  "Reserve" : 1
-}
-###
-
 #############################
 #                           # 
 #    API RESERVE SEATS      #
 #                           #
 #############################
-GET http://localhost:3001/api/bookings/1/local
+GET http://localhost:3001/api/bookings/1
+
+###
 
 ###
 POST http://localhost:3001/api/bookings
@@ -116,6 +73,4 @@ content-type : application/json
   "AirplaneType" : "international"
 }
 ###
-GET http://localhost:3001/api/bookings/1
 
-###
