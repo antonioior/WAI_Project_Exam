@@ -17,7 +17,6 @@ function Seats() {
   const navigation = useNavigate();
   const [reservation, setReservation] = useState([]);
   const {user} = useAuth();
-  
   useEffect(() => {
     const getSeats = async () => {
       let s = await getSeatsInfo(localtion.pathname);
@@ -40,7 +39,7 @@ function Seats() {
     seats,
     location.pathname
   );
-  
+  console.log(seats.length)
   //Return
   return (
     <Form onSubmit={handleSubmit}>
@@ -94,6 +93,17 @@ function Seats() {
                 now={totalSeat}
                 max={totalSeat}
                 label={totalSeat}
+              />
+            </span>
+            <span>
+              Requested seat :
+              <ProgressBar
+                striped
+                variant="warning"
+                min={0}
+                now={reservation.length}
+                max={totalSeat}
+                label={reservation.length}
               />
             </span>
           </div>
