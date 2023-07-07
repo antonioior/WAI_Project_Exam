@@ -12,7 +12,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Seats from "./components/Seats/Seats";
-import { AuthProvider } from "./components/AuthComonent";
+import { AuthProvider } from "./components/AuthComponent";
 import Login from './components/LoginComponent'
 import MyReservation from "./components/MyReservationComponent";
 

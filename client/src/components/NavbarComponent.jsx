@@ -5,12 +5,11 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Login from './LoginComponent';
 import { Link, useNavigate } from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
-import {useAuth} from "./AuthContext"
+import {useAuth} from "./AuthComponent"
 
 function NavBar() {
   const {user, logout} = useAuth();
   const navigation = useNavigate();
-  console.log(user)
   return (
     <Navbar expand="sm" sticky="top" className="bg-body-tertiary">
       <Container>
