@@ -28,12 +28,14 @@ function Seats() {
 
   const handleSubmit = async (data) => {
     data.preventDefault();
+    console.log(reservation);
     const result = reservation.map(x => ({Id : x.slice(0, x.length-1), Column : x[x.length-1]}));
     if(!user)
       navigation('/login', {replace : true})
     reserveSeats(user.id, location.pathname.slice(1), result)
       .then(() => navigation('/reservation', {replace : true}))
   }
+
   //To perform seats occupied avaible and total for every plane
   const [occupiedSeat, avaibleSeat, totalSeat] = occupiedAvaibleTotalSeat(
     seats,
@@ -101,7 +103,7 @@ function Seats() {
             <Button variant="success" type="submit" onSubmit={handleSubmit}>
               Submit
             </Button>
-            <Button variant="danger" type="submit">
+            <Button variant="danger" type="submit" href={localtion.pathname}>
               Cancel
             </Button>
           </Container>
