@@ -45,7 +45,6 @@ export const getSeatsInfo = async (planeType) =>{
     method : 'GET',
     });
   const seatsInfo = await response.json();
-  console.log(response)
   if(response.ok)
     return seatsInfo;
   throw new Error('Internal server error');  //give an error
@@ -76,7 +75,7 @@ export const reserveSeats = async (idUser, planeType, seats) => {
       "Seats" : seats
     })
   })
-  if(!response.ok)
+  if(response.ok)
     throw await response.json();
 } 
 

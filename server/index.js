@@ -37,7 +37,7 @@ const LocalStrategy = require("passport-local"); //authentication strategy(usern
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   const user = await userDao.getUser(username, password);
   if(!user)
-    return cb(null, false, 'Incorrect username or password.');
+    return cb(null, false, {"message" : "Incorrect username or password"});
     
   return cb(null, user);
 }));

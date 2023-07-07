@@ -6,37 +6,39 @@ import { useAuth } from "./AuthContext";
 import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form';
 
-function MyReservation(props) {
+function MyReservation() {
   let count=0;
   const [reservation, setReservation] = useState([]);
   const navigation = useNavigate();
   const { user } = useAuth();
 
-  if(!user) navigation("/login", {replace : true}); 
+  // if(!user) navigation("/login", {replace : true}); 
   
   useEffect(() => {
-    console.log(user.id);
-    const getReservation = async() => {
-      let result = await getReservationByUser(user.id);
-      setReservation(result);
-    };
-    getReservation();
+    if(!user)
+      navigation("/login", {replace : true});
+    else{
+      const getReservation = async() => {
+        let result = await getReservationByUser(user.id);
+        setReservation(result);
+      };
+      getReservation();
+    }
   }, []);
-
-
-  console.log(reservation )
   return (
     <Form>
       <Accordion defaultActiveKey="0">
         <div>
-          {reservation.map((x) =>(
+          {reservation.length !== 0 ? 
+            reservation.map((x) =>(
             <PrintReservation 
-            key={x.Id}
+            key={count}
             reserve={x}
             userId = {user.id} 
             count = {count++}
             />
-          ))}
+            )) : 
+            "You have not some reservations"}
         </div>
       </Accordion>
     </Form>
@@ -46,12 +48,8 @@ function MyReservation(props) {
 function PrintReservation({ reserve, userId, count }) {
   const handleClick = async(event) => {
     event.preventDefault();
-    console.log(userId);
     const res = await deleteSeats(userId, reserve);
   }
-
-  console.log(count)
-
   return(
   <Accordion.Item eventKey={count}>
     <Accordion.Header>{reserve}</Accordion.Header>

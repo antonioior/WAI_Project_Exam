@@ -28,11 +28,10 @@ function Seats() {
 
   const handleSubmit = async (data) => {
     data.preventDefault();
-    console.log(reservation);
     const result = reservation.map(x => ({Id : x.slice(0, x.length-1), Column : x[x.length-1]}));
     if(!user)
       navigation('/login', {replace : true})
-    reserveSeats(user.id, location.pathname.slice(1), result)
+    const response = reserveSeats(user.id, location.pathname.slice(1), result)
       .then(() => navigation('/reservation', {replace : true}))
   }
 
@@ -43,7 +42,6 @@ function Seats() {
   );
   
   //Return
-  //console.log(value);
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -146,7 +144,6 @@ export default Seats;
 function ButtonRow({ seat, type, props, setter }) {
 
   const handleChange = (val) => {
-    console.log(val);
     setter(val);
   }
   let colorA, colorB, colorC, colorD, colorE, colorF;
