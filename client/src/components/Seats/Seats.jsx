@@ -35,9 +35,11 @@ function Seats() {
     data.preventDefault();
     const result = reservation.map(x => ({Id : x.slice(0, x.length-1), Column : x[x.length-1]}));
     if(!user)
-      navigation('/login', {replace : true})
-    reserveSeats(user.id, location.pathname.slice(1), result)
-      .then(() => navigation('/reservation', {replace : true}))
+      navigation('/login', {replace : true});
+    else {
+      reserveSeats(user.id, location.pathname.slice(1), result)
+        .then(() => navigation('/reservation', {replace : true}));
+    }
   }
 
   //To perform seats occupied avaible and total for every plane
