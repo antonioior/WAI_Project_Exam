@@ -179,8 +179,7 @@ function ButtonRow({ seat, type, props, setter }) {
         className="sizebutton"
         value={seat.Id+"A"}
         disabled={colorA === "danger"}
-        
-      >
+      > 
         {seat.Id}
         {"A"}
       </ToggleButton>,
@@ -271,7 +270,7 @@ function ButtonRow({ seat, type, props, setter }) {
       break;
   }
   return (
-    <ToggleButtonGroup type="checkbox" value={props} onChange={handleChange}>
+    <ToggleButtonGroup type="checkbox" value={props} onChange={handleChange} as="td">
       {button.map(b => b)}
     </ToggleButtonGroup>
   )
