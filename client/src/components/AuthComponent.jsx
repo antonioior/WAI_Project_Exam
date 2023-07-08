@@ -11,7 +11,7 @@ export function AuthProvider({ ...props }) {
   const [user, setUser] = useState(null)
   const authLogin = async (userData) => {
     const data = await login(userData)
-    if (data.error) return data
+    if (data?.error) return data
     setUser(data)
     return data
   }

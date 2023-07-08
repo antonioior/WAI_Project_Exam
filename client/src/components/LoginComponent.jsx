@@ -2,9 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 import { useAuth } from './AuthComponent';
-import {Link, useNavigate} from "react-router-dom";
-import { useEffect } from 'react';
-import {getSession} from '../API';
+import {useNavigate} from "react-router-dom";
 
 function Login() {
   const {user, login} = useAuth();
@@ -35,8 +33,7 @@ function Login() {
           type="email"
           placeholder="Enter email"
           value={email}
-          onChange={ev => setEmail(ev.target.value)}
-          required={true}/>
+          onChange={ev => setEmail(ev.target.value)}/>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -46,7 +43,6 @@ function Login() {
           placeholder="Password"
           value={password}
           onChange={ev => setPassword(ev.target.value)}
-          require={true}
           />
       </Form.Group>
         <Button variant="primary" type="submit">

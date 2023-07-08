@@ -74,7 +74,6 @@ function Seats() {
           </Table>
         </Col>
         <Col md={4}>
-          <div>
             <span>
               Occupied seat :
               <ProgressBar
@@ -119,7 +118,7 @@ function Seats() {
                 label={reservation.length}
               />
             </span>
-          </div>
+          
           <Container>
             <Button variant="success" type="submit" onSubmit={handleSubmit}>
               Submit

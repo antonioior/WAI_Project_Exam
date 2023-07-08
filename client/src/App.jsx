@@ -3,13 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //Components
 import NavBar from "./components/NavbarComponent";
 import AirPlaneShows from "./components/MainPageComponent";
-import { Container, Row, Col, Button, Alert } from "react-bootstrap";
+import { Container} from "react-bootstrap";
 import {
   Routes,
   Route,
   BrowserRouter,
   Outlet,
-  Navigate,
 } from "react-router-dom";
 import Seats from "./components/Seats/Seats";
 import { AuthProvider } from "./components/AuthComponent";

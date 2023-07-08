@@ -21,9 +21,9 @@ export async function getSession() {
   const response = await fetch(`${SERVER_URL}/api/sessions/current`,{
     method: "GET",
     credentials: "include" });
-  // if(response.ok)
-  //   return await response.json();
-  //return await response.json();
+  if(response.ok)
+    return await response.json();
+  return await response.json();
 }
 
 //LOGOUT
