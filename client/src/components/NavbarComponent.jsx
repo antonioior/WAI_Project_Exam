@@ -16,35 +16,37 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link>
-              <Link to='/'>
+            <Nav.Link as="div">
+              <Link to='/' as="div">
                 Home
               </Link>
             </Nav.Link>
-            <NavDropdown title="Menu" id="basic-nav-dropdown">
+            <NavDropdown title="Menu" id="basic-nav-dropdown" as="div">
               <NavDropdown.Item>
-                <Link to='/local'>
+                <Link to='/local' as="div">
                   Local
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to='/regional'>
+                <Link to='/regional' as="div">
                   Regional
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to='/international'>
+                <Link to='/international' as="div">
                   International
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Link to="/reservation">
+                <Link to="/reservation" as="div">
                   My reservation
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
+            <div>
               {<ButtonLoginLogut user={user} logout={logout}/>}
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -55,9 +57,9 @@ function NavBar() {
 function ButtonLoginLogut({user, logout}) {
   const navigation = useNavigate();
   if(!user)
-    return(<Button href="/login" className="mt-3" variant="secondary">Login</Button>)
+    return(<Button className="mt-3" as="div" variant="secondary" onClick={() => navigation("/login")}>Login</Button>)
   else
-    return(<Button className="mt-3" variant='secondary'  onClick={() => {
+    return(<Button className="mt-3" as="div" variant='secondary'  onClick={(event) => {event.preventDefault()
       logout().then(() => {if (location.pathname !== "/") navigation("/", {replace : true})})}}>{user.name}</Button>)
 }
 

@@ -67,6 +67,7 @@ function Seats() {
                     type={location.pathname}
                     props={reservation}
                     setter={setReservation}
+                    as="span"
                   />
                 </tr>
               ))}
