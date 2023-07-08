@@ -23,7 +23,8 @@ function Seats() {
   useEffect(() => {
     let interval = setInterval(() => {
       setSeconds(seconds => seconds+1)}, 5000);
-    const getSeats = async () => {
+    
+      const getSeats = async () => {
       let s = await getSeatsInfo(localtion.pathname);
       setSeats(s);
     };
@@ -38,8 +39,13 @@ function Seats() {
       navigation('/login', {replace : true});
     else {
       reserveSeats(user.id, location.pathname.slice(1), result)
-        .then(() => navigation('/reservation', {replace : true}));
+        .then(() => navigation('/reservation', {replace : true}))
     }
+  }
+
+  const handleCancel = async (data) => {
+    data.preventDefault();
+    navigation("/", {replace : true})
   }
 
   //To perform seats occupied avaible and total for every plane
@@ -118,7 +124,7 @@ function Seats() {
             <Button variant="success" type="submit" onSubmit={handleSubmit}>
               Submit
             </Button>
-            <Button variant="danger" type="submit" href={localtion.pathname}>
+            <Button variant="danger" type="submit" onClick={handleCancel}>
               Cancel
             </Button>
           </Container>
@@ -153,9 +159,6 @@ function occupiedAvaibleTotalSeat(seats, type) {
   }
   return [occupiedSeat, avaibleSeat, totalSeat];
 }
-
-export default Seats;
-
 
 
 function ButtonRow({ seat, type, props, setter }) {
@@ -273,3 +276,5 @@ function ButtonRow({ seat, type, props, setter }) {
     </ToggleButtonGroup>
   )
 }
+
+export default Seats;

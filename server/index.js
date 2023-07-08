@@ -105,11 +105,9 @@ app.post('/api/sessions', function(req, res, next) {
 
 // GET /api/sessions/current
 //This route check if the user is logged in or not
-app.get('/api/sessions/current',isLoggedIn, (req, res) => {
+app.get('/api/sessions/current', (req, res) => {
   if(req.isAuthenticated()) {
     res.json(req.user);}
-  else
-    res.status(401).json({error: 'Not authenticated'});
 });
 
 // DELETE /api/session/current

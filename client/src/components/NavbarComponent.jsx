@@ -45,15 +45,21 @@ function NavBar() {
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
-            {user ? 
-              <Button variant='secondary' onClick={() => {
-                logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>{user.name}</Button> : 
-              <Button href="/login" className="mt-3" variant="secondary">Login</Button>}
+              <ButtonLoginLogut user={user} logout={logout}/>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
+}
+
+function ButtonLoginLogut({user, logout}) {
+  if(!user)
+    return(<Button href="/login" className="mt-3" variant="secondary">Login</Button>)
+  else
+    return(<Button variant='secondary' onClick={() => {
+      logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>{user.name}</Button>)
+
 }
 
 export default NavBar;
