@@ -16,35 +16,35 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link id="RouterNavLink" style={null}>
-              <Link id="RouterNavLink" style={null} to='/'>
+            <Nav.Link>
+              <Link to='/'>
                 Home
               </Link>
             </Nav.Link>
             <NavDropdown title="Menu" id="basic-nav-dropdown">
               <NavDropdown.Item>
-                <Link id="RouterNavLink" style={null} to='/local'>
+                <Link to='/local'>
                   Local
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link id="RouterNavLink" style={null} to='/regional'>
+                <Link to='/regional'>
                   Regional
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link id="RouterNavLink" style={null} to='/international'>
+                <Link to='/international'>
                   International
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Link id="RouterNavLink" style={null} to="/reservation">
+                <Link to="/reservation">
                   My reservation
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
-              <ButtonLoginLogut user={user} logout={logout}/>
+              {<ButtonLoginLogut user={user} logout={logout}/>}
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -57,9 +57,8 @@ function ButtonLoginLogut({user, logout}) {
   if(!user)
     return(<Button href="/login" className="mt-3" variant="secondary">Login</Button>)
   else
-    return(<Button variant='secondary' onClick={() => {
-      logout().then(() => {if (location.pathname !== "/") navigation("/")})}}>{user.name}</Button>)
-
+    return(<Button className="mt-3" variant='secondary'  onClick={() => {
+      logout().then(() => {if (location.pathname !== "/") navigation("/", {replace : true})})}}>{user.name}</Button>)
 }
 
 export default NavBar;
