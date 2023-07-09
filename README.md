@@ -19,9 +19,9 @@
     [
       {
         "Id": 1,
-        "A": 0,
-        "B": 0,
-        "C": 0,
+        "A": 1,
+        "B": 1,
+        "C": 1,
         "D": 0
       },
       {
@@ -43,14 +43,14 @@
       {
         "Id": 1,
         "A": 0,
-        "B": 0,
-        "C": 0,
+        "B": 1,
+        "C": 1,
         "D": 0,
         "E": 0
       },
       {
         "Id": 2,
-        "A": 0,
+        "A": 1,
         "B": 0,
         "C": 0,
         "D": 0,
@@ -71,8 +71,8 @@
         "B": 0,
         "C": 0,
         "D": 0,
-        "E": 0,
-        "F": 0
+        "E": 1,
+        "F": 1
       },
       {
         "Id": 2,
@@ -91,14 +91,17 @@
   - Prerequisite: User is logged in 
   - Response Status : `200` OK, `500` Internal Server Error
   - Response Body : 
+  ```
     [
       "local",
       "regional"
     ]
+  ```
 
 - __POST__ `/api/bookings`- to do a reservation on a specific plane
   - Prerequisite: User is logged in
   - Request body:
+  ```
     {
       "IdUser": Int - IdUser,
       "PlaneType": String - (local/regional/international),
@@ -110,18 +113,26 @@
         {...}
       ]
     }
+    ```
   - Response Status : `201` Created, `304` Not Modified, `400` Bad request in db, `500` Internal Server Error
-  - Response Body : {"Message" : "Booked successfully"}
-  
+  - Response Body : 
+  ```
+    {"Message" : "Booked successfully"}
+  ```
 - __DELETE__ `/api/bookings` - to delete a reservation on a specific plane
   - Prerequisite: User is logged in
   - Request body:
+  ```
     {
       "IdUser": Int - IdUser,
       "PlaneType": String - (local/regional/international),
     }
+  ```
   -Response Status : `200` Ok, `304` Not Modified, `400` Bad request in db, `503` Service Unavailable
-  -Response Body : {"message" : "deleted with success"}
+  -Response Body : 
+  ```
+    {"message" : "deleted with success"}
+  ```
 
 ### User login
 - __POST__ `/api/sessions`
@@ -201,8 +212,8 @@
 
 ## Users Credentials
 
-- antonio@polito.it, 12345678 (has reservartion in  and in )
-- marco@polito.it, 12345678 (has reservation in and in)
+- antonio@polito.it, 12345678 (has reservartion in local: 1A, 1B, 1C and in regional : 2A, 3A)
+- marco@polito.it, 12345678 (has reservation in regional: 1B, 1C and in international: 1E, 1F)
 - paolo@polito.it, 12345678 (no reservation)
 - matteo@polito.it, 12345678 (no reservation)
 
