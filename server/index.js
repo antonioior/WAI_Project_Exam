@@ -191,7 +191,7 @@ app.post('/api/bookings', isLoggedIn, async(req, res) => {
   const planeType = req.body.PlaneType;
   const alreadyReservation = await AirplaneSeats_dao.getBookingByUserIdAndByPlane(idUser, planeType);
   if(alreadyReservation.length > 0)
-    return res.status(400).json({"Message" : "You have altready a reservation"});
+      return res.status(400).json({"Message" : "You have altready a reservation"}); 
   for (const seat of seats){
     switch(planeType) {
       case 'local': {

@@ -75,7 +75,7 @@ export const reserveSeats = async (idUser, planeType, seats) => {
     })
   })
   if(!response.ok)
-    await response.json();
+    throw new Error("Request not valid");
 } 
 
 //API TO DELETE RESERVATION ON A PLANE
