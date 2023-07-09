@@ -8,9 +8,9 @@ const AuthContext = createContext({
 })
 
 export function AuthProvider({ ...props }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const authLogin = async (userData) => {
-    const data = await login(userData)
+    const data = await login(userData);
     if (data?.error) return data
     setUser(data)
     return data
@@ -36,9 +36,9 @@ export function AuthProvider({ ...props }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context
 }

@@ -45,8 +45,8 @@ export const getSeatsInfo = async (planeType) =>{
     });
   const seatsInfo = await response.json();
   if(response.ok)
-    return seatsInfo;
-  throw new Error('Internal server error');  //give an error
+    return await seatsInfo;
+  throw  new Error('Internal server error');  //give an error
 }
 
 //API TO VIEW THE RESERVATION OF A USER
